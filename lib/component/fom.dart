@@ -37,6 +37,45 @@ nama(TextEditingController controller, BuildContext context) {
   ));
 }
 
+Widget formfield(TextEditingController controller, BuildContext context,
+    String hint, IconData icon) {
+  return Container(
+      child: TextFormField(
+    controller: controller,
+    validator: (value) {
+      if (value != null && value.length < 3)
+        return 'Harus diisi minimal 3 kata';
+      else
+        return null;
+    },
+    autofocus: false,
+    decoration: InputDecoration(
+      labelStyle: TextStyle(color: biru),
+      icon: Icon(icon, color: biru, size: 40),
+      labelText: hint,
+    ),
+  ));
+}
+
+Widget searchfield(
+    TextEditingController controller, BuildContext context, String hint) {
+  return Container(
+      child: TextFormField(
+    controller: controller,
+    validator: (value) {
+      if (value != null && value.length < 3)
+        return 'Harus diisi minimal 3 kata';
+      else
+        return null;
+    },
+    autofocus: false,
+    decoration: InputDecoration(
+      labelStyle: TextStyle(color: biru),
+      labelText: hint,
+    ),
+  ));
+}
+
 password(TextEditingController controller, bool hide) {
   return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Container(
@@ -545,6 +584,26 @@ Widget loginButton(String text, Color warna, Color textwarna) {
                 fontWeight: FontWeight.w500,
                 textStyle: Theme.of(context).textTheme.subtitle1,
               ))),
+      decoration: BoxDecoration(
+        color: warna,
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        // shadowColor: Color.fromRGBO(237, 155, 12, 1),
+      ),
+      // elevation: 5.0,
+    ),
+  );
+}
+
+Widget searchButton(IconData icon, Color warna, Color iconWarna) {
+  return Builder(
+    builder: (context) => Container(
+      height: tinggi(context) * 0.09,
+      child: Center(
+          child: Icon(
+        icon,
+        color: iconWarna,
+        size: 30,
+      )),
       decoration: BoxDecoration(
         color: warna,
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
