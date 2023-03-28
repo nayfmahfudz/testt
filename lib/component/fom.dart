@@ -536,7 +536,7 @@ var okButton = Builder(
 Widget loginButton(String text, Color warna, Color textwarna) {
   return Builder(
     builder: (context) => Container(
-      height: tinggi(context) * 0.06,
+      height: tinggi(context) * 0.09,
       child: Center(
           child: Text(text,
               style: GoogleFonts.roboto(

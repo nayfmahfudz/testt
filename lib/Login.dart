@@ -27,7 +27,7 @@ class LoginState extends State<Login> {
                     key: formKey,
                     child: ListView(
                       shrinkWrap: true,
-                      padding: EdgeInsets.only(top: tinggi(context) * 0.10),
+                      padding: EdgeInsets.all(tinggi(context) * 0.2),
                       children: <Widget>[
                         SizedBox(height: 24.0),
                         nama(namaController, context),
@@ -36,18 +36,17 @@ class LoginState extends State<Login> {
                         SizedBox(height: 24.0),
                         GestureDetector(
                             onTap: () {
-                              if (formKey.currentState!.validate()) {
-                                if (namaController.text == "admin" &&
-                                    passwordController.text == "admin") {
-                                  navigateToNextScreen(context, Menu());
-                                } else {
-                                  berhasil(context, "Username/Password Salah");
-                                }
-                              }
+                              // if (formKey.currentState!.validate()) {
+                              //   if (namaController.text == "admin" &&
+                              //       passwordController.text == "admin") {
+                              navigateToNextScreen(context, Menu());
+                              //   } else {
+                              //     berhasil(context, "Username/Password Salah");
+                              //   }
+                              // }
                             },
                             child: loginButton('Log In', biru, putih)),
                         SizedBox(height: 8.0),
-                        text("Belum punya akun?", () {}),
                       ],
                     )),
               ),
