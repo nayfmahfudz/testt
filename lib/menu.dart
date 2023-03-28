@@ -13,14 +13,58 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: catatan(),
-      bottomNavigationBar: bottomNavBar(context),
+      body: catatan(context),
+      // bottomNavigationBar: bottomNavBar(context),
     );
   }
 }
 
-Widget catatan() {
-  return Container();
+Widget catatan(context) {
+  return Container(
+    height: tinggi(context) * 0.45,
+    decoration: BoxDecoration(
+      color: biru,
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(35.0),
+          bottomRight: Radius.circular(35.0)),
+      // shadowColor: Color.fromRGBO(237, 155, 12, 1),
+    ),
+    child: Row(children: [
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: lebar(context) * 0.15,
+                  width: lebar(context) * 0.15,
+                  color: putih,
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+      Expanded(
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.person, color: putih, size: tinggi(context) * 0.04),
+              Text(
+                "Setting",
+                style: TextStyle(color: putih),
+              )
+            ],
+          ),
+        ),
+      )
+    ]),
+  );
 }
 
 Widget bottomNavBar(context) {
