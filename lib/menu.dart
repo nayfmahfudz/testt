@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:frino_icons/frino_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:testt/Visit.dart';
 import 'package:testt/component/fom.dart';
 import 'package:testt/pendaftaran.dart';
@@ -15,7 +19,8 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: putih,
+      backgroundColor: abu,
+
       body: Column(
         children: [catatan(context), dashboard(context)],
       ),
@@ -27,9 +32,9 @@ class _MenuState extends State<Menu> {
 Widget dashboard(context) {
   return Container(
     height: tinggi(context) * 0.5,
-    decoration: BoxDecoration(
-      color: putih,
-    ),
+    // decoration: BoxDecoration(
+    //   color: putih,
+    // ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -46,6 +51,13 @@ Widget dashboard(context) {
               }),
               child: Container(
                 decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: biru.withOpacity(0.4),
+                      blurRadius: 6,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
                   color: birumuda,
                   borderRadius: BorderRadius.all(Radius.circular(35.0)),
                   // shadowColor: Color.fromRGBO(237, 155, 12, 1),
@@ -54,15 +66,15 @@ Widget dashboard(context) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.account_box_rounded,
+                    Icon(FrinoIcons.f_edit,
                         color: Colors.grey, size: tinggi(context) * 0.2),
-                    Text(
-                      "PENDAFTARAN",
-                      style: TextStyle(
-                          color: hitam,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w400),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
                     ),
+                    Text("Pendaftaran",
+                        style: GoogleFonts.josefinSans(
+                          textStyle: Theme.of(context).textTheme.bodySmall,
+                        )),
                   ],
                 ),
               ),
@@ -81,6 +93,13 @@ Widget dashboard(context) {
               }),
               child: Container(
                 decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: biru.withOpacity(0.4),
+                      blurRadius: 6,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
                   color: birumuda,
                   borderRadius: BorderRadius.all(Radius.circular(35.0)),
                   // shadowColor: Color.fromRGBO(237, 155, 12, 1),
@@ -89,15 +108,15 @@ Widget dashboard(context) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.location_on,
+                    Icon(FrinoIcons.f_mark,
                         color: Colors.red[300], size: tinggi(context) * 0.2),
-                    Text(
-                      "Visit",
-                      style: TextStyle(
-                          color: hitam,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w400),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
                     ),
+                    Text("Visit",
+                        style: GoogleFonts.josefinSans(
+                          textStyle: Theme.of(context).textTheme.bodySmall,
+                        ))
                   ],
                 ),
               ),
@@ -116,11 +135,17 @@ Widget catatan(context) {
   return Container(
     height: tinggi(context) * 0.45,
     decoration: BoxDecoration(
-      color: biru,
+      boxShadow: <BoxShadow>[
+        BoxShadow(
+          color: Colors.green.withOpacity(0.4),
+          blurRadius: 4,
+          offset: Offset(0, 5),
+        ),
+      ],
+      color: Color.fromARGB(255, 129, 199, 132),
       borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(35.0),
           bottomRight: Radius.circular(35.0)),
-      // shadowColor: Color.fromRGBO(237, 155, 12, 1),
     ),
     child: Row(children: [
       Padding(
@@ -146,49 +171,62 @@ Widget catatan(context) {
       ),
       Expanded(
         child: Padding(
-          padding: const EdgeInsets.only(left: 45.0, top: 45),
+          padding: EdgeInsets.only(
+              left: lebar(context) * 0.014, top: tinggi(context) * 0.094),
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  "Nama : Joko",
-                  style: TextStyle(
-                      color: hitam, fontSize: 25, fontWeight: FontWeight.w500),
+                Expanded(
+                  child: Text("Nama : Joko",
+                      style: GoogleFonts.josefinSans(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                      )),
                 ),
-                SizedBox(
-                  height: tinggi(context) * 0.014,
+                // SizedBox(
+                //   height: tinggi(context) * 0.001,
+                // ),
+                Expanded(
+                  child: Text(
+                    "Jabatan  : Sales ",
+                    style: GoogleFonts.josefinSans(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
                 ),
-                Text(
-                  "Jabatan  : Sales ",
-                  style: TextStyle(
-                      color: hitam, fontSize: 25, fontWeight: FontWeight.w500),
+                // SizedBox(
+                //   height: tinggi(context) * 0.004,
+                // ),
+                Expanded(
+                  child: Text(
+                    "Status : Berkunjung",
+                    style: GoogleFonts.josefinSans(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
                 ),
-                SizedBox(
-                  height: tinggi(context) * 0.014,
+                // SizedBox(
+                //   height: tinggi(context) * 0.004,
+                // ),
+                Expanded(
+                  child: Text(
+                    "Keterangan  : ",
+                    style: GoogleFonts.josefinSans(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
                 ),
-                Text(
-                  "Status : Berkunjung",
-                  style: TextStyle(
-                      color: hitam, fontSize: 25, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: tinggi(context) * 0.014,
-                ),
-                Text(
-                  "Keterangan  : ",
-                  style: TextStyle(
-                      color: hitam, fontSize: 25, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: tinggi(context) * 0.014,
-                ),
+                // SizedBox(
+                //   height: tinggi(context) * 0.004,
+                // ),
                 Container(
                     height: tinggi(context) * 0.09,
                     width: lebar(context) * 0.25,
-                    child: loginButton('Absen Masuk',
-                        Color.fromARGB(255, 129, 199, 132), hitam))
+                    child: loginButton('Absen Masuk', biru, putih)),
+                SizedBox(
+                  height: tinggi(context) * 0.029,
+                ),
               ],
             ),
           ),
@@ -196,7 +234,7 @@ Widget catatan(context) {
       ),
       Expanded(
         child: Padding(
-          padding: const EdgeInsets.only(left: 45.0, top: 45, bottom: 45),
+          padding: const EdgeInsets.only(left: 45.0, top: 45),
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,31 +243,36 @@ Widget catatan(context) {
                 Container(
                     height: tinggi(context) * 0.1,
                     width: lebar(context) * 0.25,
-                    child: loginButton('Check Out',
-                        Color.fromARGB(255, 229, 115, 115), hitam)),
+                    child: loginButton('Check Out', merah, putih)),
                 SizedBox(
-                  height: tinggi(context) * 0.014,
+                  height: tinggi(context) * 0.044,
                 ),
-                Text(
-                  "Visit ",
-                  style: TextStyle(
-                      color: hitam, fontSize: 25, fontWeight: FontWeight.w500),
+                Expanded(
+                  child: Text(
+                    "Visit ",
+                    style: GoogleFonts.josefinSans(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "Toko  : Makmur Jaya ",
+                    style: GoogleFonts.josefinSans(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "Owner : Sulistyo",
+                    style: GoogleFonts.josefinSans(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
                 ),
                 SizedBox(
-                  height: tinggi(context) * 0.014,
-                ),
-                Text(
-                  "Toko  : Makmur Jaya ",
-                  style: TextStyle(
-                      color: hitam, fontSize: 25, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: tinggi(context) * 0.014,
-                ),
-                Text(
-                  "Owner : Sulistyo",
-                  style: TextStyle(
-                      color: hitam, fontSize: 25, fontWeight: FontWeight.w500),
+                  height: tinggi(context) * 0.02,
                 ),
               ],
             ),

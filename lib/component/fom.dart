@@ -578,7 +578,7 @@ Widget loginButton(String text, Color warna, Color textwarna) {
       height: tinggi(context) * 0.09,
       child: Center(
           child: Text(text,
-              style: GoogleFonts.roboto(
+              style: GoogleFonts.josefinSans(
                 fontSize: 16,
                 color: textwarna,
                 fontWeight: FontWeight.w500,
