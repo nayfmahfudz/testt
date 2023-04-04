@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Balai Lab',
+        title: 'Sales Online',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
