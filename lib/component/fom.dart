@@ -17,24 +17,33 @@ lebar(context) {
 }
 
 nama(TextEditingController controller, BuildContext context) {
-  return Container(
-      child: TextFormField(
-    controller: controller,
-    validator: (value) {
-      if (value != null && value.length < 3)
-        return 'Nama Harus diisi minimal 3 kata';
-      else
-        return null;
-    },
-    autofocus: false,
-    decoration: InputDecoration(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+  return Row(
+    children: [
+      Container(child: Icon(Icons.account_box, size: 60, color: orange)),
+      Expanded(
+        child: Container(
+          color: putih,
+          child: TextFormField(
+            controller: controller,
+            validator: (value) {
+              if (value != null && value.length < 3)
+                return 'Nama Harus diisi minimal 3 kata';
+              else
+                return null;
+            },
+            autofocus: false,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: BorderSide.none),
+              hintText: 'Username',
+              contentPadding: EdgeInsets.all(20),
+            ),
+          ),
+        ),
       ),
-      hintText: 'Username',
-      contentPadding: EdgeInsets.all(20),
-    ),
-  ));
+    ],
+  );
 }
 
 Widget formfield(TextEditingController controller, BuildContext context,
