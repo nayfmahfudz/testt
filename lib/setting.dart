@@ -9,3 +9,6 @@ const peach = Color.fromRGBO(255, 233, 201, 1);
 const orange = Color.fromRGBO(247, 130, 0, 1);
 const hijau = Color.fromARGB(255, 129, 199, 132);
 const hitam = Colors.black;
+var key = "";
+var user = {};
+var url = "https://kharismastationerykupang.com";

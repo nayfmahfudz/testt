@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:testt/setting.dart';
 
 import 'component/fom.dart';
@@ -12,6 +14,92 @@ class Pendafataran extends StatefulWidget {
 
 class _PendafataranState extends State<Pendafataran> {
   @override
+  //  absen(String absen) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await Geolocator.requestPermission();
+  //   permission = await Geolocator.checkPermission();
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (nipText.text == "") {
+  //     callBackNip();
+  //   } else if (!serviceEnabled) {
+  //     berhasil(context, "Izin Location Ditolak");
+  //   } else {
+  //     Position position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
+
+  //     await _picker
+  //         .pickImage(source: ImageSource.camera)
+  //         .then((value) => {value != null ? photo = value : null});
+  //     photo != null
+  //         ? uploadImage(File(photo.path), position.latitude.toString(),
+  //                 position.longitude.toString(), outputnip, absen)
+  //             .then((value) => {
+  //                   if (value["success"] == true)
+  //                     {berhasil(context, value["message"])}
+  //                   else
+  //                     {berhasil(context, value)}
+  //                 })
+  //         : null;
+  //     photo = null;
+  //   }
+  // }
+  Future daftar() async {
+    try {
+      await Geolocator.requestPermission();
+      var permission = await Geolocator.checkPermission();
+      var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        berhasil(context, "Izin Location Ditolak");
+      }
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      print({
+        "nama": namaController.text,
+        "nama_toko": namaTokoController.text,
+        "alamat_toko": alamatTokoController.text,
+        "email": emailController.text,
+        "telepon": teleponController.text,
+        "password": passwordController.text,
+        "retype_password": passwordController.text,
+        "kelurahan": KelurahanController.text,
+        "kecamatan": KecamatanController.text,
+        "kota": kotaController.text,
+        "lat": position.latitude.toString(),
+        "lng": position.latitude.toString()
+      });
+      FormData formData = FormData.fromMap({
+        "nama": namaController.text,
+        "nama_toko": namaTokoController.text,
+        "alamat_toko": alamatTokoController.text,
+        "email": emailController.text,
+        "telepon": teleponController.text,
+        "password": passwordController.text,
+        "retype_password": passwordController.text,
+        "kelurahan": KelurahanController.text,
+        "kecamatan": KecamatanController.text,
+        "kota": kotaController.text,
+        "lat": position.latitude.toString(),
+        "lng": position.latitude.toString()
+      });
+      var response = await Dio().post('$url/api/sales/attendance',
+          data: formData,
+          options: Options(headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $key",
+          }));
+      print(response.data);
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } on DioError catch (e) {
+      print(e);
+      if (e.response?.statusCode == 400) {
+        return false;
+      }
+    }
+  }
+
   var namaController = new TextEditingController();
   var namaTokoController = new TextEditingController();
   var alamatTokoController = new TextEditingController();
@@ -106,11 +194,14 @@ class _PendafataranState extends State<Pendafataran> {
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: Container(
-                height: tinggi(context) * 0.11,
-                width: lebar(context) * 0.3,
-                child: loginButton(
-                    'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+            child: GestureDetector(
+              onTap: (() => daftar()),
+              child: Container(
+                  height: tinggi(context) * 0.11,
+                  width: lebar(context) * 0.3,
+                  child: loginButton(
+                      'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+            ),
           ),
         ],
       ),

@@ -8,6 +8,11 @@ navigateToNextScreen(BuildContext context, Widget newScreen) {
       .push(MaterialPageRoute(builder: (context) => newScreen));
 }
 
+replaceToNextScreen(BuildContext context, Widget newScreen) {
+  Navigator.of(context)
+      .pushReplacement(MaterialPageRoute(builder: (context) => newScreen));
+}
+
 tinggi(context) {
   return MediaQuery.of(context).size.height;
 }
@@ -87,7 +92,21 @@ Widget searchfield(
 
 password(TextEditingController controller, bool hide) {
   return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) => Container(
+    builder: (BuildContext context, StateSetter setState) => Row(
+      children: [
+        Container(
+          child: GestureDetector(
+            onTap: (() => setState(() {
+                  controller;
+                  hide = !hide;
+                })),
+            child: Icon(hide ? Icons.lock : Icons.lock_open,
+                size: 60, color: orange),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: putih,
             child: TextFormField(
                 validator: (value) {
                   if (value != null && value.length < 5)
@@ -104,18 +123,22 @@ password(TextEditingController controller, bool hide) {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   ),
-                  suffixIcon: IconButton(
-                      icon: Icon(
-                        hide ? Icons.visibility : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          controller;
-                          hide = !hide;
-                        });
-                      }),
+                  //   suffixIcon: IconButton(
+                  //       icon: Icon(
+                  //         hide ? Icons.visibility : Icons.visibility_off,
+                  //       ),
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           controller;
+                  //           hide = !hide;
+                  //         });
+                  //       }),
                 )),
-          ));
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class ReturnValueToParent extends StatelessWidget {
@@ -329,18 +352,18 @@ void berhasil(BuildContext context, String uraian) => showDialog(
     );
 var okButton = Builder(
   builder: (BuildContext context) => Material(
-    shadowColor: birumuda,
+    shadowColor: peach,
     child: MaterialButton(
       minWidth: 200.0,
       height: 42.0,
       onPressed: () {
         Navigator.pop(context);
       },
-      color: biru,
+      color: peach,
       child: Text(
         'OK',
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.black,
         ),
         textAlign: TextAlign.center,
       ),
@@ -374,22 +397,45 @@ var okButton = Builder(
 //           ),
 //         ));
 
-// alarm(BuildContext context) => showDialog(
-//     context: context,
-//     builder: (context) => Center(
-//           child: AlertDialog(
-//             content: Text(
-//               Provider.of<Restapi>(context).getmsgggl(),
-//               textAlign: TextAlign.center,
-//               style:
-//                   TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
-//             ),
-//             elevation: 3,
-// //                actionsPadding: EdgeInsets.only(right: 28),
+alarm(BuildContext context, String text) => showDialog(
+    context: context,
+    builder: (context) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Container(
+                height: MediaQuery.of(context).size.width * 0.2,
+                width: MediaQuery.of(context).size.width * 0.4,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.withOpacity(0.3),
+                    ),
+                    color: putih),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        child: Center(
+                          child: DefaultTextStyle(
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                            child: Text(
+                              text,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: Center(child: okButton))
+                  ],
+                )),
+          ),
+        ));
 
-//             actions: <Widget>[okButton],
-//           ),
-//         ));
 // var keluaryaButton = Builder(
 //   builder: (BuildContext context) => Material(
 //     shadowColor: Color.fromRGBO(237, 155, 12, 1),

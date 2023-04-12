@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frino_icons/frino_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,6 +40,28 @@ class _MenuState extends State<Menu> {
   }
 }
 
+Future attendance() async {
+  try {
+    FormData formData = FormData.fromMap({});
+    var response = await Dio().post('$url/api/sales/attendance',
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        }));
+    print(response.data);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  } on DioError catch (e) {
+    print(e);
+    if (e.response?.statusCode == 400) {
+      return false;
+    }
+  }
+}
+
 Widget appbar(context) {
   return Container(
     color: putih,
@@ -62,7 +85,7 @@ Widget appbar(context) {
           SizedBox(
             height: tinggi(context) * 0.015,
           ),
-          Text("JOKO",
+          Text(user["nama"],
               style: GoogleFonts.montserrat(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -71,7 +94,7 @@ Widget appbar(context) {
           SizedBox(
             height: tinggi(context) * 0.015,
           ),
-          Text("Sales",
+          Text(user["type"],
               style: GoogleFonts.montserrat(
                 fontSize: 20,
                 textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -81,9 +104,13 @@ Widget appbar(context) {
           ),
           Container(
               height: tinggi(context) * 0.07,
-              child: loginButton('Berkunjung', hijau, putih)),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: lebar(context) * 0.04, right: lebar(context) * 0.04),
+                child: loginButton('Berkunjung', hijau, putih),
+              )),
           SizedBox(
-            height: tinggi(context) * 0.03,
+            height: tinggi(context) * 0.05,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -103,11 +130,16 @@ Widget appbar(context) {
           SizedBox(
             height: tinggi(context) * 0.007,
           ),
-          Container(
-              height: tinggi(context) * 0.07,
-              child: loginButton('Absen Masuk', biru, putih)),
+          GestureDetector(
+            onTap: (() {
+              attendance();
+            }),
+            child: Container(
+                height: tinggi(context) * 0.07,
+                child: loginButton('Absen Masuk', biru, putih)),
+          ),
           SizedBox(
-            height: tinggi(context) * 0.015,
+            height: tinggi(context) * 0.025,
           ),
           Align(
             alignment: Alignment.bottomLeft,
@@ -160,6 +192,9 @@ Widget appbar(context) {
               ),
             ],
           ),
+          SizedBox(
+            height: tinggi(context) * 0.01,
+          ),
           Row(
             children: [
               Container(
@@ -194,6 +229,12 @@ Widget appbar(context) {
               ),
             ],
           ),
+          SizedBox(
+            height: tinggi(context) * 0.02,
+          ),
+          Container(
+              height: tinggi(context) * 0.07,
+              child: loginButton('Check Out', abu, hitam)),
         ],
       ),
     ),
@@ -293,6 +334,7 @@ Widget catatan(context) {
   return Padding(
     padding: const EdgeInsets.all(20.0),
     child: Container(
+      padding: EdgeInsets.all(lebar(context) * 0.02),
       height: tinggi(context) * 0.35,
       decoration: BoxDecoration(
         boxShadow: <BoxShadow>[
@@ -306,139 +348,37 @@ Widget catatan(context) {
         borderRadius: BorderRadius.all(Radius.circular(25.0)),
       ),
       child: Row(children: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(left: 60.0, top: 45),
-        //     child: Container(
-        //       child: Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         mainAxisAlignment: MainAxisAlignment.start,
-        //         children: [
-        //           Container(
-        //             decoration: BoxDecoration(
-        //               color: putih,
-        //               borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        //               // shadowColor: Color.fromRGBO(237, 155, 12, 1),
-        //             ),
-        //             height: lebar(context) * 0.15,
-        //             width: lebar(context) * 0.15,
-        //             child: Center(child: Text("Foto")),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        //   Expanded(
-        //     child: Padding(
-        //       padding: EdgeInsets.only(
-        //           left: lebar(context) * 0.014, top: tinggi(context) * 0.094),
-        //       child: Container(
-        //         child: Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           mainAxisAlignment: MainAxisAlignment.start,
-        //           children: [
-        //             Expanded(
-        //               child: Text("Nama : Joko",
-        //                   style: GoogleFonts.josefinSans(
-        //                     textStyle: Theme.of(context).textTheme.bodyLarge,
-        //                   )),
-        //             ),
-        //             // SizedBox(
-        //             //   height: tinggi(context) * 0.001,
-        //             // ),
-        //             Expanded(
-        //               child: Text(
-        //                 "Jabatan  : Sales ",
-        //                 style: GoogleFonts.josefinSans(
-        //                   textStyle: Theme.of(context).textTheme.bodyLarge,
-        //                 ),
-        //               ),
-        //             ),
-        //             // SizedBox(
-        //             //   height: tinggi(context) * 0.004,
-        //             // ),
-        //             Expanded(
-        //               child: Text(
-        //                 "Status : Berkunjung",
-        //                 style: GoogleFonts.josefinSans(
-        //                   textStyle: Theme.of(context).textTheme.bodyLarge,
-        //                 ),
-        //               ),
-        //             ),
-        //             // SizedBox(
-        //             //   height: tinggi(context) * 0.004,
-        //             // ),
-        //             Expanded(
-        //               child: Text(
-        //                 "Keterangan  : ",
-        //                 style: GoogleFonts.josefinSans(
-        //                   textStyle: Theme.of(context).textTheme.bodyLarge,
-        //                 ),
-        //               ),
-        //             ),
-        //             // SizedBox(
-        //             //   height: tinggi(context) * 0.004,
-        //             // ),
-        //             Container(
-        //                 height: tinggi(context) * 0.09,
-        //                 width: lebar(context) * 0.25,
-        //                 child: loginButton('Absen Masuk', biru, putih)),
-        //             SizedBox(
-        //               height: tinggi(context) * 0.029,
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        //   Expanded(
-        //     child: Padding(
-        //       padding: const EdgeInsets.only(left: 45.0, top: 45),
-        //       child: Container(
-        //         child: Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           mainAxisAlignment: MainAxisAlignment.start,
-        //           children: [
-        //             Container(
-        //                 height: tinggi(context) * 0.1,
-        //                 width: lebar(context) * 0.25,
-        //                 child: loginButton('Check Out', merah, putih)),
-        //             SizedBox(
-        //               height: tinggi(context) * 0.044,
-        //             ),
-        //             Expanded(
-        //               child: Text(
-        //                 "Visit ",
-        //                 style: GoogleFonts.josefinSans(
-        //                   textStyle: Theme.of(context).textTheme.bodyLarge,
-        //                 ),
-        //               ),
-        //             ),
-        //             Expanded(
-        //               child: Text(
-        //                 "Toko  : Makmur Jaya ",
-        //                 style: GoogleFonts.josefinSans(
-        //                   textStyle: Theme.of(context).textTheme.bodyLarge,
-        //                 ),
-        //               ),
-        //             ),
-        //             Expanded(
-        //               child: Text(
-        //                 "Owner : Sulistyo",
-        //                 style: GoogleFonts.josefinSans(
-        //                   textStyle: Theme.of(context).textTheme.bodyLarge,
-        //                 ),
-        //               ),
-        //             ),
-        //             SizedBox(
-        //               height: tinggi(context) * 0.02,
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   )
-        //
-        //
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: lebar(context) * 0.025, top: tinggi(context) * 0.034),
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("Welcome, Joko",
+                      style: GoogleFonts.montserrat(
+                        color: putih,
+                        fontSize: 40,
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                      )),
+                  Expanded(
+                    child: Text(
+                      "Have Nice a Day",
+                      style: GoogleFonts.montserrat(
+                        color: putih,
+                        fontSize: 16,
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Expanded(flex: 1, child: Image.asset("assets/welcome.png"))
       ]),
     ),
   );
