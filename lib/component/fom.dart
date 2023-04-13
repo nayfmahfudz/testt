@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testt/component/api.dart';
 
 import '../setting.dart';
 
@@ -48,6 +49,42 @@ nama(TextEditingController controller, BuildContext context) {
         ),
       ),
     ],
+  );
+}
+
+Widget dropdown(Map<String, dynamic> controller, BuildContext context,
+    List list, IconData icon, String hint, void fungsi(value)) {
+  print(controller);
+  return DropdownButtonFormField(
+    decoration: InputDecoration(
+      labelStyle: TextStyle(color: biru),
+      icon: Icon(icon, color: orange, size: 40),
+      labelText: hint,
+    ),
+    // Initial Value
+    value: controller.length == 0 ? null : controller,
+
+    // Down Arrow Icon
+    icon: Icon(Icons.arrow_drop_down_circle, color: merah),
+
+    // Array list of items
+    items: list.map((items) {
+      return DropdownMenuItem(
+        value: items ?? {},
+        child: Text(items?["nama"] ?? ""),
+      );
+    }).toList(),
+    // After selecting the desired option,it will
+    // change button value to selected value
+    onChanged: (newValue) async {
+      newValue as Map<String, dynamic>;
+      if (newValue != null) {
+        var newValue2 = newValue["id"] ?? "";
+
+        fungsi(newValue2);
+        // });
+      }
+    },
   );
 }
 
