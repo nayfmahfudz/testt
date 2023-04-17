@@ -54,77 +54,136 @@ nama(TextEditingController controller, BuildContext context) {
 
 Widget dropdown(Map<String, dynamic> controller, BuildContext context,
     List list, IconData icon, String hint, void fungsi(value)) {
-  print(controller);
-  return DropdownButtonFormField(
-    decoration: InputDecoration(
-      labelStyle: TextStyle(color: biru),
-      icon: Icon(icon, color: orange, size: 40),
-      labelText: hint,
-    ),
-    // Initial Value
-    value: controller.length == 0 ? null : controller,
+  return Row(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(right: 14.0),
+        child: Container(
+          child: Icon(icon, size: 40, color: orange),
+        ),
+      ),
+      Expanded(
+        child: Container(
+          color: putih,
+          child: DropdownButtonFormField(
+            decoration: InputDecoration(
+              labelStyle: TextStyle(color: biru),
+              contentPadding: EdgeInsets.all(20),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              labelText: hint,
+            ),
+            validator: (value) {
+              if (value == null)
+                return 'Masukan data terlebih dahulu';
+              else
+                return null;
+            },
+            value: controller.length == 0 ? null : controller,
 
-    // Down Arrow Icon
-    icon: Icon(Icons.arrow_drop_down_circle, color: merah),
+            // Down Arrow Icon
+            icon: Icon(Icons.arrow_drop_down_circle, color: merah),
 
-    // Array list of items
-    items: list.map((items) {
-      return DropdownMenuItem(
-        value: items ?? {},
-        child: Text(items?["nama"] ?? ""),
-      );
-    }).toList(),
-    // After selecting the desired option,it will
-    // change button value to selected value
-    onChanged: (newValue) async {
-      newValue as Map<String, dynamic>;
-      if (newValue != null) {
-        var newValue2 = newValue["id"] ?? "";
-
-        fungsi(newValue2);
-        // });
-      }
-    },
+            // Array list of items
+            items: list.map((items) {
+              return DropdownMenuItem(
+                value: items ?? {},
+                child: Text(items?["nama"] ?? ""),
+              );
+            }).toList(),
+            // After selecting the desired option,it will
+            // change button value to selected value
+            onChanged: (newValue) async {
+              newValue as Map<String, dynamic>;
+              if (newValue != null) {
+                fungsi(newValue);
+                // });
+              }
+            },
+          ),
+        ),
+      ),
+    ],
   );
 }
 
 Widget formfield(TextEditingController controller, BuildContext context,
-    String hint, IconData icon) {
-  return Container(
-      child: TextFormField(
-    controller: controller,
-    validator: (value) {
-      if (value != null && value.length < 3)
-        return 'Harus diisi minimal 3 kata';
-      else
-        return null;
-    },
-    autofocus: false,
-    decoration: InputDecoration(
-      labelStyle: TextStyle(color: biru),
-      icon: Icon(icon, color: biru, size: 40),
-      labelText: hint,
-    ),
-  ));
+    String hint, IconData icon, IconData iconClose, hide, pasword) {
+  return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) => Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 14.0),
+                child: GestureDetector(
+                  onTap: (() => setState(() {
+                        controller;
+                        hide = !hide;
+                      })),
+                  child: Container(
+                    child:
+                        Icon(hide ? icon : iconClose, size: 40, color: orange),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: putih,
+                  child: TextFormField(
+                    obscureText: pasword == true
+                        ? hide
+                            ? true
+                            : false
+                        : false,
+                    controller: controller,
+                    validator: (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    },
+                    autofocus: false,
+                    decoration: InputDecoration(
+                        labelStyle: TextStyle(color: biru),
+                        // icon: Icon(icon, color: orange, size: 40),
+                        labelText: hint,
+                        contentPadding: EdgeInsets.all(20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        )),
+                  ),
+                ),
+              ),
+            ],
+          ));
 }
 
-Widget searchfield(
-    TextEditingController controller, BuildContext context, String hint) {
+Widget searchfield(TextEditingController controller, BuildContext context,
+    String hint, void fungsi(value)) {
   return Container(
+      color: putih,
       child: TextFormField(
-    controller: controller,
-    validator: (value) {
-      if (value != null && value.length < 3)
-        return 'Harus diisi minimal 3 kata';
-      else
-        return null;
-    },
-    autofocus: false,
-    decoration: InputDecoration(
-      labelStyle: TextStyle(color: biru),
-      labelText: hint,
-    ),
-  ));
+        onChanged: (value) {
+          fungsi(value);
+          // pelanggan(context, value);
+        },
+        controller: controller,
+        validator: (value) {
+          if (value != null && value.length < 3)
+            return 'Harus diisi minimal 3 kata';
+          else
+            return null;
+        },
+        autofocus: false,
+        decoration: InputDecoration(
+            labelStyle: TextStyle(color: biru),
+            // icon: Icon(icon, color: orange, size: 40),
+            labelText: hint,
+            contentPadding: EdgeInsets.all(20),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            )),
+      ));
 }
 
 password(TextEditingController controller, bool hide) {

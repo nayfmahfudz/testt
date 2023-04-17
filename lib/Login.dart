@@ -8,40 +8,14 @@ import 'package:testt/component/fom.dart';
 import 'package:testt/menu.dart';
 import 'package:testt/setting.dart';
 
+import 'component/api.dart';
+
 class Login extends StatefulWidget {
   @override
   LoginState createState() => LoginState();
 }
 
 class LoginState extends State<Login> {
-  Future Login(String email, String pass) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      FormData formData = FormData.fromMap({
-        "email": email,
-        "password": pass,
-      });
-      var response = await Dio().post('$url/api/sales/login', data: formData);
-      print(response.data["data"]["user"]);
-      if (response.statusCode == 200) {
-        print(response.data);
-        prefs.setString('user', jsonEncode(response.data["data"]["user"]));
-        prefs.setString('key', response.data["data"]["token"]);
-        user = response.data["data"]["user"];
-        key = response.data["data"]["token"];
-        return true;
-      }
-      error = response.data["message"];
-      return false;
-    } on DioError catch (e) {
-      print(e);
-      if (e.response?.statusCode == 400) {
-        error = e.response?.data["message"];
-        return false;
-      }
-    }
-  }
-
   final formKey = GlobalKey<FormState>();
   var namaController = new TextEditingController();
   var passwordController = new TextEditingController();
@@ -102,17 +76,19 @@ class LoginState extends State<Login> {
                             SizedBox(height: tinggi(context) * 0.05),
                             GestureDetector(
                                 onTap: () {
-                                  Login(namaController.text,
-                                          passwordController.text)
-                                      .then(
-                                    (value) {
-                                      if (value) {
-                                        replaceToNextScreen(context, Menu());
-                                      } else {
-                                        alarm(context, error);
-                                      }
-                                    },
-                                  );
+                                  if (formKey.currentState!.validate()) {
+                                    login(namaController.text,
+                                            passwordController.text, context)
+                                        .then(
+                                      (value) {
+                                        if (value) {
+                                          replaceToNextScreen(context, Menu());
+                                        } else {
+                                          alarm(context, error);
+                                        }
+                                      },
+                                    );
+                                  }
                                 },
                                 child: loginButton('Login', orange, putih)),
                             SizedBox(height: 8.0),

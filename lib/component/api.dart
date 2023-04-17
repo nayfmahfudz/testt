@@ -1,8 +1,67 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testt/Login.dart';
 import 'package:testt/component/fom.dart';
 import 'package:testt/setting.dart';
+
+Future login(String email, String pass, BuildContext context) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    FormData formData = FormData.fromMap({
+      "email": email,
+      "password": pass,
+    });
+    var response = await Dio().post('$url/api/sales/login', data: formData);
+    print(response.data["data"]["user"]);
+    if (response.statusCode == 200) {
+      print(response.data);
+      prefs.setString('user', jsonEncode(response.data["data"]["user"]));
+      prefs.setString('key', response.data["data"]["token"]);
+      user = response.data["data"]["user"];
+      key = response.data["data"]["token"];
+      return true;
+    }
+    var error = response.data["message"];
+    alarm(context, error);
+    return false;
+  } on DioError catch (e) {
+    // print(e);
+    // if (e.response?.statusCode == 401) {
+    //   var error = e.response?.data["message"];
+    //   alarm(context, error);
+    //   return false;
+    // }
+  }
+}
+
+Future pelanggan(BuildContext context, String cari) async {
+  try {
+    print('$url/api/sales/pelanggan?pagination=0&search=${cari}');
+    var response =
+        await Dio().get('$url/api/sales/pelanggan?pagination=0&search=${cari}',
+            options: Options(headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $key",
+            }));
+    print(response.data);
+    if (response.statusCode == 200) {
+      return response.data["data"];
+    }
+    return [];
+  } on DioError catch (e) {
+    print(e);
+    if (e.response?.statusCode == 401) {
+      replaceToNextScreen(context, Login());
+      alarm(context, e.response?.data.message);
+      return [];
+    }
+    return [];
+  }
+}
 
 Future provinsi(BuildContext context) async {
   try {
@@ -18,7 +77,9 @@ Future provinsi(BuildContext context) async {
     return false;
   } on DioError catch (e) {
     print(e);
-    if (e.response?.statusCode == 400) {
+    if (e.response?.statusCode == 401) {
+      replaceToNextScreen(context, Login());
+      alarm(context, e.response?.data.message);
       return false;
     }
   }
@@ -38,7 +99,9 @@ Future kabkota(BuildContext context, idprov) async {
     return false;
   } on DioError catch (e) {
     print(e);
-    if (e.response?.statusCode == 400) {
+    if (e.response?.statusCode == 401) {
+      replaceToNextScreen(context, Login());
+      alarm(context, e.response?.data.message);
       return false;
     }
   }
@@ -58,7 +121,9 @@ Future kecamatan(BuildContext context, idkota) async {
     return false;
   } on DioError catch (e) {
     print(e);
-    if (e.response?.statusCode == 400) {
+    if (e.response?.statusCode == 401) {
+      replaceToNextScreen(context, Login());
+      alarm(context, e.response?.data.message);
       return false;
     }
   }
@@ -78,7 +143,9 @@ Future kelurahan(BuildContext context, String idkecamatan) async {
     return false;
   } on DioError catch (e) {
     print(e);
-    if (e.response?.statusCode == 400) {
+    if (e.response?.statusCode == 401) {
+      replaceToNextScreen(context, Login());
+      alarm(context, e.response?.data.message);
       return false;
     }
   }
@@ -133,7 +200,7 @@ Future daftar(
       "lat": position.latitude.toString(),
       "lng": position.latitude.toString()
     });
-    var response = await Dio().post('$url/api/sales/attendance',
+    var response = await Dio().post('$url/api/sales/pelanggan',
         data: formData,
         options: Options(headers: {
           "Content-Type": "application/json",
@@ -145,8 +212,10 @@ Future daftar(
     }
     return false;
   } on DioError catch (e) {
-    print(e);
-    if (e.response?.statusCode == 400) {
+    print(e.response?.data);
+    if (e.response?.statusCode == 401) {
+      replaceToNextScreen(context, Login());
+      // alarm(context, e.response?.data.message);
       return false;
     }
   }

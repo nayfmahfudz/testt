@@ -270,19 +270,20 @@ Widget dashboard(context) {
                         offset: Offset(0, 8),
                       ),
                     ],
-                    color: birumuda,
+                    color: peach,
                     borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     // shadowColor: Color.fromRGBO(237, 155, 12, 1),
                   ),
-                  child: Icon(Icons.add_box,
-                      color: Colors.grey, size: tinggi(context) * 0.08),
+                  child: Icon(Icons.add_card,
+                      color: orange, size: tinggi(context) * 0.08),
                 ),
                 SizedBox(
                   height: tinggi(context) * 0.02,
                 ),
                 Text("Pendaftaran",
                     style: GoogleFonts.montserrat(
-                      textStyle: Theme.of(context).textTheme.bodySmall,
+                      fontSize: 18,
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
                     )),
               ],
             ),
@@ -292,7 +293,7 @@ Widget dashboard(context) {
           padding: const EdgeInsets.all(30.0),
           child: GestureDetector(
             onTap: (() {
-              navigateToNextScreen(context, Pendafataran());
+              navigateToNextScreen(context, Visit());
             }),
             child: Column(
               children: [
@@ -307,19 +308,20 @@ Widget dashboard(context) {
                         offset: Offset(0, 8),
                       ),
                     ],
-                    color: birumuda,
+                    color: peach,
                     borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     // shadowColor: Color.fromRGBO(237, 155, 12, 1),
                   ),
                   child: Icon(Icons.location_on,
-                      color: Colors.grey, size: tinggi(context) * 0.08),
+                      color: Colors.orange, size: tinggi(context) * 0.1),
                 ),
                 SizedBox(
                   height: tinggi(context) * 0.02,
                 ),
                 Text("Visit",
                     style: GoogleFonts.montserrat(
-                      textStyle: Theme.of(context).textTheme.bodySmall,
+                      fontSize: 18,
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
                     )),
               ],
             ),

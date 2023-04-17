@@ -37,6 +37,7 @@ class _PendafataranState extends State<Pendafataran> {
   var KecamatanController = Map<String, dynamic>();
   var KelurahanController = Map<String, dynamic>();
   var ProvinsiController = Map<String, dynamic>();
+  final formKey = GlobalKey<FormState>();
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -61,129 +62,158 @@ class _PendafataranState extends State<Pendafataran> {
 
   Widget form(context) {
     return Container(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ListView(shrinkWrap: true, children: [
-                  formfield(namaController, context, "Nama", Icons.account_box),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  formfield(namaTokoController, context, "Nama Toko",
-                      Icons.account_balance),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  formfield(alamatTokoController, context, "Alamat Toko",
-                      Icons.account_balance),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  formfield(emailController, context, "E-mail", Icons.mail),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  formfield(teleponController, context, "Telepon", Icons.phone),
-                ]),
-              ),
-              SizedBox(
-                width: lebar(context) * 0.12,
-              ),
-              Expanded(
-                child: ListView(shrinkWrap: true, children: [
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  formfield(passwordController, context, "Password",
-                      Icons.visibility),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  dropdown(ProvinsiController, context, Provinsi,
-                      Icons.location_city, "Provinsi", ((value) {
-                    kabkota(context, value).then((newvalue) {
+      child: Form(
+        key: formKey,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ListView(shrinkWrap: true, children: [
+                    formfield(namaController, context, "Nama",
+                        Icons.account_box, Icons.account_box, false, false),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(
+                        namaTokoController,
+                        context,
+                        "Nama Toko",
+                        Icons.account_balance,
+                        Icons.account_balance,
+                        false,
+                        false),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(
+                        alamatTokoController,
+                        context,
+                        "Alamat Toko",
+                        Icons.account_balance,
+                        Icons.account_balance,
+                        false,
+                        false),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(emailController, context, "E-mail", Icons.mail,
+                        Icons.mail, false, false),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(teleponController, context, "Telepon",
+                        Icons.phone, Icons.phone, false, false),
+                  ]),
+                ),
+                SizedBox(
+                  width: lebar(context) * 0.12,
+                ),
+                Expanded(
+                  child: ListView(shrinkWrap: true, children: [
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(passwordController, context, "Password",
+                        Icons.visibility, Icons.visibility_off, false, true),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    dropdown(ProvinsiController, context, Provinsi,
+                        Icons.location_city, "Provinsi", ((value) {
                       setState(() {
-                        Kota = newvalue ?? [];
-                        Kecamatan = [];
-                        Kelurahan = [];
-                        kotaController = newvalue[0];
-                        KecamatanController = {};
-                        KelurahanController = {};
-                      });
-                    });
-                  })),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  dropdown(kotaController, context, Kota, Icons.location_city,
-                      "Kota", ((value) {
-                    setState(() {
-                      kecamatan(context, value).then((newvalue) {
-                        setState(() {
-                          Kecamatan = newvalue ?? [];
-                          Kelurahan = [];
-                          KecamatanController = newvalue[0];
-                          KelurahanController = {};
+                        ProvinsiController = value;
+                        kabkota(context, value["id"]).then((newvalue) {
+                          setState(() {
+                            Kota = newvalue ?? [];
+                            Kecamatan = [];
+                            Kelurahan = [];
+                            kotaController = newvalue[0];
+                            KecamatanController = {};
+                            KelurahanController = {};
+                          });
                         });
                       });
-                    });
-                  })),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  dropdown(KecamatanController, context, Kecamatan,
-                      Icons.location_city, "Kecamatan", ((value) {
-                    setState(() {
-                      kelurahan(context, value).then((newvalue) {
-                        setState(() {
-                          Kelurahan = newvalue ?? [];
-                          KelurahanController = newvalue[0];
+                    })),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    dropdown(kotaController, context, Kota, Icons.location_city,
+                        "Kota", ((value) {
+                      setState(() {
+                        kotaController = value;
+                        kecamatan(context, value["id"]).then((newvalue) {
+                          setState(() {
+                            Kecamatan = newvalue ?? [];
+                            Kelurahan = [];
+                            KecamatanController = newvalue[0];
+                            KelurahanController = {};
+                          });
                         });
                       });
-                    });
-                  })),
-                  SizedBox(
-                    height: tinggi(context) * 0.04,
-                  ),
-                  dropdown(KelurahanController, context, Kelurahan,
-                      Icons.location_city, "Kelurahan", ((value) {
-                    setState(() {});
-                  })),
-                ]),
-              ),
-            ],
-          ),
-          SizedBox(
-            width: lebar(context) * 0.12,
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: GestureDetector(
-              onTap: (() => daftar(
-                  namaController,
-                  namaTokoController,
-                  alamatTokoController,
-                  emailController,
-                  teleponController,
-                  passwordController,
-                  ProvinsiController["nama"],
-                  KelurahanController["nama"],
-                  KecamatanController["nama"],
-                  kotaController["nama"],
-                  context)),
-              child: Container(
-                  height: tinggi(context) * 0.11,
-                  width: lebar(context) * 0.3,
-                  child: loginButton(
-                      'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+                    })),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    dropdown(KecamatanController, context, Kecamatan,
+                        Icons.location_city, "Kecamatan", ((value) {
+                      setState(() {
+                        KecamatanController = value;
+                        kelurahan(context, value["id"]).then((newvalue) {
+                          setState(() {
+                            Kelurahan = newvalue ?? [];
+                            KelurahanController = newvalue[0];
+                          });
+                        });
+                      });
+                    })),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    dropdown(KelurahanController, context, Kelurahan,
+                        Icons.location_city, "Kelurahan", ((value) {
+                      setState(() {
+                        KelurahanController = value;
+                      });
+                    })),
+                  ]),
+                ),
+              ],
             ),
-          ),
-        ],
+            SizedBox(
+              height: tinggi(context) * 0.1,
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: GestureDetector(
+                onTap: (() {
+                  if (formKey.currentState!.validate()) {
+                    daftar(
+                        namaController,
+                        namaTokoController,
+                        alamatTokoController,
+                        emailController,
+                        teleponController,
+                        passwordController,
+                        ProvinsiController["nama"],
+                        KelurahanController["nama"],
+                        KecamatanController["nama"],
+                        kotaController["nama"],
+                        context);
+                  }
+                }),
+                child: Container(
+                    height: tinggi(context) * 0.11,
+                    width: lebar(context) * 0.3,
+                    child: loginButton(
+                        'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
