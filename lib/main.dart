@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:testt/Login.dart';
+import 'package:testt/component/api.dart';
 import 'package:testt/menu.dart';
 import 'package:testt/setting.dart';
 import 'package:testt/splashscreen.dart';
@@ -33,11 +34,15 @@ class _MyAppState extends State<MyApp> {
   Future splashscreen() async {
     return await Future.delayed(Duration(seconds: 6), () async {
       final prefs = await SharedPreferences.getInstance();
-      key = prefs.getString("key")!;
-      user = jsonDecode(prefs.getString("user")!);
-      print(key);
-      print(user);
-      if (key == null || key == "" && user == null || user == {}) {
+      print(prefs.getString("user"));
+      key = prefs.getString("key") ?? "";
+      user =
+          prefs.getString("user") == null || prefs.getString("user") == "null"
+              ? {}
+              : jsonDecode(prefs.getString("user") ?? "");
+      await cekAbsen(context);
+      await cekKunjungan(context);
+      if (key == null || key == "" && user == null || user.length == 0) {
         main = false;
       } else {
         main = true;

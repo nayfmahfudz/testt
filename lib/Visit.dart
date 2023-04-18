@@ -156,11 +156,17 @@ class _VisitState extends State<Visit> {
                         SizedBox(
                           height: tinggi(context) * 0.014,
                         ),
-                        Container(
-                            height: tinggi(context) * 0.09,
-                            width: lebar(context) * 0.15,
-                            child: loginButton('Visit',
-                                Color.fromARGB(255, 129, 199, 132), hitam))
+                        GestureDetector(
+                          onTap: (() {
+                            kunjungan(
+                                pelanggans[index]["id"].toString(), context);
+                          }),
+                          child: Container(
+                              height: tinggi(context) * 0.09,
+                              width: lebar(context) * 0.15,
+                              child: loginButton('Visit',
+                                  Color.fromARGB(255, 129, 199, 132), hitam)),
+                        )
                       ],
                     )
                   ],

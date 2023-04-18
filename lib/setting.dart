@@ -15,4 +15,7 @@ List Kota = [];
 List Kecamatan = [];
 List Kelurahan = [];
 List Provinsi = [];
+var pelangganVisit = {};
+var absen = {};
+
 var url = "https://kharismastationerykupang.com";

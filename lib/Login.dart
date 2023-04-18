@@ -83,8 +83,6 @@ class LoginState extends State<Login> {
                                       (value) {
                                         if (value) {
                                           replaceToNextScreen(context, Menu());
-                                        } else {
-                                          alarm(context, error);
                                         }
                                       },
                                     );

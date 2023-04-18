@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +7,60 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testt/Login.dart';
 import 'package:testt/component/fom.dart';
 import 'package:testt/setting.dart';
+
+Future attendance(BuildContext context) async {
+  try {
+    FormData formData = FormData.fromMap({});
+    var response = await Dio().post('$url/api/sales/attendance',
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        }));
+    var error = response.data["message"];
+    alarm(context, error);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  } on DioError catch (e) {
+    print(e);
+    if (e.response?.statusCode == 400) {
+      return false;
+    }
+  }
+}
+
+Future kunjungan(String id, BuildContext context) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    FormData formData = FormData.fromMap({
+      "pelanggan_id": id,
+    });
+    var response = await Dio().post('$url/api/sales/kunjungan', data: formData);
+    print(response.data);
+    if (response.statusCode == 200) {
+      print(response.data);
+      // user = response.data["data"]["user"];
+      // key = response.data["data"]["token"];
+      return true;
+    }
+    var error = response.data["message"];
+    alarm(context, error);
+    return false;
+  } on DioError catch (e) {
+    // print(e);
+    if (e.response?.statusCode == 401) {
+      final prefs = await SharedPreferences.getInstance();
+      var error = e.response?.data["message"];
+      alarm(context, error);
+      replaceToNextScreen(context, Login());
+      prefs.setString('user', "null");
+      prefs.setString('key', "null");
+      return false;
+    }
+  }
+}
 
 Future login(String email, String pass, BuildContext context) async {
   try {
@@ -16,7 +70,7 @@ Future login(String email, String pass, BuildContext context) async {
       "password": pass,
     });
     var response = await Dio().post('$url/api/sales/login', data: formData);
-    print(response.data["data"]["user"]);
+    print(response.data);
     if (response.statusCode == 200) {
       print(response.data);
       prefs.setString('user', jsonEncode(response.data["data"]["user"]));
@@ -31,16 +85,76 @@ Future login(String email, String pass, BuildContext context) async {
   } on DioError catch (e) {
     // print(e);
     // if (e.response?.statusCode == 401) {
-    //   var error = e.response?.data["message"];
-    //   alarm(context, error);
-    //   return false;
+    var error = e.response?.data["message"];
+    alarm(context, error);
+    return false;
     // }
+  }
+}
+
+Future cekKunjungan(BuildContext context) async {
+  try {
+    var response = await Dio().get('$url/api/sales/kunjungan/check-today',
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        }));
+    print(response.data);
+    if (response.statusCode == 200) {
+      return response.data["data"];
+    }
+    return [];
+  } on DioError catch (e) {
+    print(e);
+    if (e.response?.statusCode == 401) {
+      final prefs = await SharedPreferences.getInstance();
+      var error = e.response?.data["message"];
+      alarm(context, error);
+      replaceToNextScreen(context, Login());
+      prefs.setString('user', "null");
+      prefs.setString('key', "null");
+      return [];
+    }
+    return [];
+  }
+}
+
+Future cekAbsen(BuildContext context) async {
+  try {
+    var response = await Dio().get('$url/api/sales/attendance/check-today',
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        }));
+    absen["masuk"] = response.data["data"]["time_start"] == null
+        ? ""
+        : DateFormat('hh:mm').format(
+            DateFormat('HH:mm').parse(response.data["data"]["time_start"]));
+    absen["keluar"] = response.data["data"]["time_end"] == null
+        ? ""
+        : DateFormat('hh:mm').format(
+            DateFormat('HH:mm').parse(response.data["data"]["time_end"]));
+    if (response.statusCode == 200) {
+      return response.data["data"];
+    }
+    return [];
+  } on DioError catch (e) {
+    print(e);
+    if (e.response?.statusCode == 401) {
+      final prefs = await SharedPreferences.getInstance();
+      var error = e.response?.data["message"];
+      alarm(context, error);
+      replaceToNextScreen(context, Login());
+      prefs.setString('user', "null");
+      prefs.setString('key', "null");
+      return [];
+    }
+    return [];
   }
 }
 
 Future pelanggan(BuildContext context, String cari) async {
   try {
-    print('$url/api/sales/pelanggan?pagination=0&search=${cari}');
     var response =
         await Dio().get('$url/api/sales/pelanggan?pagination=0&search=${cari}',
             options: Options(headers: {
@@ -55,8 +169,12 @@ Future pelanggan(BuildContext context, String cari) async {
   } on DioError catch (e) {
     print(e);
     if (e.response?.statusCode == 401) {
+      final prefs = await SharedPreferences.getInstance();
+      var error = e.response?.data["message"];
+      alarm(context, error);
       replaceToNextScreen(context, Login());
-      alarm(context, e.response?.data.message);
+      prefs.setString('user', "null");
+      prefs.setString('key', "null");
       return [];
     }
     return [];
@@ -213,10 +331,15 @@ Future daftar(
     return false;
   } on DioError catch (e) {
     print(e.response?.data);
+
     if (e.response?.statusCode == 401) {
+      final prefs = await SharedPreferences.getInstance();
+      var error = e.response?.data["message"];
+      alarm(context, error);
       replaceToNextScreen(context, Login());
-      // alarm(context, e.response?.data.message);
-      return false;
+      prefs.setString('user', "null");
+      prefs.setString('key', "null");
+      return [];
     }
   }
 }

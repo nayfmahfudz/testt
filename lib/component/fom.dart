@@ -10,8 +10,9 @@ navigateToNextScreen(BuildContext context, Widget newScreen) {
 }
 
 replaceToNextScreen(BuildContext context, Widget newScreen) {
-  Navigator.of(context)
-      .pushReplacement(MaterialPageRoute(builder: (context) => newScreen));
+  Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => newScreen),
+      (Route<dynamic> route) => false);
 }
 
 tinggi(context) {

@@ -9,6 +9,8 @@ import 'package:testt/component/fom.dart';
 import 'package:testt/pendaftaran.dart';
 import 'package:testt/setting.dart';
 
+import 'component/api.dart';
+
 class Menu extends StatefulWidget {
   const Menu({super.key});
 
@@ -40,28 +42,6 @@ class _MenuState extends State<Menu> {
   }
 }
 
-Future attendance() async {
-  try {
-    FormData formData = FormData.fromMap({});
-    var response = await Dio().post('$url/api/sales/attendance',
-        data: formData,
-        options: Options(headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $key",
-        }));
-    print(response.data);
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
-  } on DioError catch (e) {
-    print(e);
-    if (e.response?.statusCode == 400) {
-      return false;
-    }
-  }
-}
-
 Widget appbar(context) {
   return Container(
     color: putih,
@@ -85,7 +65,7 @@ Widget appbar(context) {
           SizedBox(
             height: tinggi(context) * 0.015,
           ),
-          Text(user["nama"],
+          Text(user["nama"] ?? "",
               style: GoogleFonts.montserrat(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -94,7 +74,7 @@ Widget appbar(context) {
           SizedBox(
             height: tinggi(context) * 0.015,
           ),
-          Text(user["type"],
+          Text(user["type"] ?? "",
               style: GoogleFonts.montserrat(
                 fontSize: 20,
                 textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -115,12 +95,18 @@ Widget appbar(context) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("Masuk : 08.00",
+              Text(
+                  absen["masuk"] == null
+                      ? "Masuk :"
+                      : "Masuk :" + absen["masuk"],
                   style: GoogleFonts.montserrat(
                     fontSize: 12,
                     textStyle: Theme.of(context).textTheme.bodyLarge,
                   )),
-              Text("Masuk : 15.00",
+              Text(
+                  absen["keluar"] == null
+                      ? "Keluar :"
+                      : "Keluar :" + absen["keluar"],
                   style: GoogleFonts.montserrat(
                     fontSize: 12,
                     textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -132,11 +118,14 @@ Widget appbar(context) {
           ),
           GestureDetector(
             onTap: (() {
-              attendance();
+              absen["keluar"] != "" ? null : attendance(context);
             }),
             child: Container(
                 height: tinggi(context) * 0.07,
-                child: loginButton('Absen Masuk', biru, putih)),
+                child: loginButton(
+                    absen["masuk"] == "" ? 'Absen Masuk' : 'Absen Keluar',
+                    absen["keluar"] == "" ? biru : abu,
+                    absen["keluar"] == "" ? putih : hitam)),
           ),
           SizedBox(
             height: tinggi(context) * 0.025,
