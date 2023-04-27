@@ -57,10 +57,13 @@ Widget appbar(context) {
           SizedBox(
             height: tinggi(context) * 0.02,
           ),
-          CircleAvatar(
-            radius: 60,
-            backgroundColor: orange,
-            // backgroundImage: AssetImage('assets/horse.png'),
+          Flexible(
+            child: CircleAvatar(
+              minRadius: 30,
+              maxRadius: 60,
+              backgroundColor: orange,
+              // backgroundImage: AssetImage('assets/horse.png'),
+            ),
           ),
           SizedBox(
             height: tinggi(context) * 0.015,
@@ -90,7 +93,7 @@ Widget appbar(context) {
                 child: loginButton('Berkunjung', hijau, putih),
               )),
           SizedBox(
-            height: tinggi(context) * 0.05,
+            height: tinggi(context) * 0.02,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

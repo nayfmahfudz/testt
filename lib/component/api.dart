@@ -109,8 +109,8 @@ Future cekKunjungan(BuildContext context) async {
     if (e.response?.statusCode == 401) {
       final prefs = await SharedPreferences.getInstance();
       var error = e.response?.data["message"];
-      alarm(context, error);
-      replaceToNextScreen(context, Login());
+      // alarm(context, error);
+      // replaceToNextScreen(context, Login());
       prefs.setString('user', "null");
       prefs.setString('key', "null");
       return [];
@@ -143,8 +143,8 @@ Future cekAbsen(BuildContext context) async {
     if (e.response?.statusCode == 401) {
       final prefs = await SharedPreferences.getInstance();
       var error = e.response?.data["message"];
-      alarm(context, error);
-      replaceToNextScreen(context, Login());
+      // alarm(context, error);
+      // replaceToNextScreen(context, Login());
       prefs.setString('user', "null");
       prefs.setString('key', "null");
       return [];
@@ -331,15 +331,16 @@ Future daftar(
     return false;
   } on DioError catch (e) {
     print(e.response?.data);
-
+    var error = e.response?.data["errors"][0]["message"];
     if (e.response?.statusCode == 401) {
       final prefs = await SharedPreferences.getInstance();
-      var error = e.response?.data["message"];
+
       alarm(context, error);
       replaceToNextScreen(context, Login());
       prefs.setString('user', "null");
       prefs.setString('key', "null");
       return [];
     }
+    alarm(context, error);
   }
 }

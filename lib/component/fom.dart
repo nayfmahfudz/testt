@@ -67,6 +67,7 @@ Widget dropdown(Map<String, dynamic> controller, BuildContext context,
         child: Container(
           color: putih,
           child: DropdownButtonFormField(
+            isExpanded: true,
             decoration: InputDecoration(
               labelStyle: TextStyle(color: biru),
               contentPadding: EdgeInsets.all(20),
