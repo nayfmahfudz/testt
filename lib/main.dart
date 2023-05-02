@@ -32,6 +32,8 @@ class _MyAppState extends State<MyApp> {
 
   bool main = false;
   Future splashscreen() async {
+    absen["masuk"] = "";
+    absen["keluar"] = "";
     return await Future.delayed(Duration(seconds: 6), () async {
       final prefs = await SharedPreferences.getInstance();
       print(prefs.getString("user"));

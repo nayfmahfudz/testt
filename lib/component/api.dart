@@ -19,7 +19,9 @@ Future attendance(BuildContext context) async {
         }));
     var error = response.data["message"];
     alarm(context, error);
+    print(response.data);
     if (response.statusCode == 200) {
+      cekAbsen(context);
       return true;
     }
     return false;
@@ -37,10 +39,17 @@ Future kunjungan(String id, BuildContext context) async {
     FormData formData = FormData.fromMap({
       "pelanggan_id": id,
     });
-    var response = await Dio().post('$url/api/sales/kunjungan', data: formData);
+    var response = await Dio().post('$url/api/sales/kunjungan',
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        }));
     print(response.data);
     if (response.statusCode == 200) {
       print(response.data);
+      alarm(context, response.data["message"]);
+      await cekKunjungan(context);
       // user = response.data["data"]["user"];
       // key = response.data["data"]["token"];
       return true;
@@ -101,7 +110,8 @@ Future cekKunjungan(BuildContext context) async {
         }));
     print(response.data);
     if (response.statusCode == 200) {
-      return response.data["data"];
+      pelangganVisit = response.data["data"];
+      return pelangganVisit;
     }
     return [];
   } on DioError catch (e) {
@@ -324,14 +334,16 @@ Future daftar(
           "Content-Type": "application/json",
           "Authorization": "Bearer $key",
         }));
-    print(response.data);
-    if (response.statusCode == 200) {
+    print(response.statusCode.toString() == "200");
+    if (response.statusCode.toString() == "200") {
+      alarm(context, response.data["message"]);
+
       return true;
     }
     return false;
   } on DioError catch (e) {
     print(e.response?.data);
-    var error = e.response?.data["errors"][0]["message"];
+    var error = e.response?.data?["errors"][0]["message"];
     if (e.response?.statusCode == 401) {
       final prefs = await SharedPreferences.getInstance();
 

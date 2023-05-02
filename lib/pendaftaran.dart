@@ -192,17 +192,27 @@ class _PendafataranState extends State<Pendafataran> {
                 onTap: (() {
                   if (formKey.currentState!.validate()) {
                     daftar(
-                        namaController,
-                        namaTokoController,
-                        alamatTokoController,
-                        emailController,
-                        teleponController,
-                        passwordController,
-                        ProvinsiController["nama"],
-                        KelurahanController["nama"],
-                        KecamatanController["nama"],
-                        kotaController["nama"],
-                        context);
+                            namaController,
+                            namaTokoController,
+                            alamatTokoController,
+                            emailController,
+                            teleponController,
+                            passwordController,
+                            ProvinsiController["nama"],
+                            KelurahanController["nama"],
+                            KecamatanController["nama"],
+                            kotaController["nama"],
+                            context)
+                        .then((value) {
+                      if (value == true) {
+                        namaController.text = "";
+                        namaTokoController.text = "";
+                        alamatTokoController.text = "";
+                        emailController.text = "";
+                        teleponController.text = "";
+                        passwordController.text = "";
+                      }
+                    });
                   }
                 }),
                 child: Container(

@@ -40,197 +40,234 @@ class _MenuState extends State<Menu> {
       // bottomNavigationBar: bottomNavBar(context),
     );
   }
-}
 
-Widget appbar(context) {
-  return Container(
-    color: putih,
-    child: Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        children: [
-          Text("Sales Dashboard",
-              style: GoogleFonts.montserrat(
-                fontSize: 20,
-                textStyle: Theme.of(context).textTheme.bodyLarge,
-              )),
-          SizedBox(
-            height: tinggi(context) * 0.02,
-          ),
-          Flexible(
-            child: CircleAvatar(
-              minRadius: 30,
-              maxRadius: 60,
-              backgroundColor: orange,
-              // backgroundImage: AssetImage('assets/horse.png'),
-            ),
-          ),
-          SizedBox(
-            height: tinggi(context) * 0.015,
-          ),
-          Text(user["nama"] ?? "",
-              style: GoogleFonts.montserrat(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                textStyle: Theme.of(context).textTheme.bodyLarge,
-              )),
-          SizedBox(
-            height: tinggi(context) * 0.015,
-          ),
-          Text(user["type"] ?? "",
-              style: GoogleFonts.montserrat(
-                fontSize: 20,
-                textStyle: Theme.of(context).textTheme.bodyLarge,
-              )),
-          SizedBox(
-            height: tinggi(context) * 0.015,
-          ),
-          Container(
-              height: tinggi(context) * 0.07,
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: lebar(context) * 0.04, right: lebar(context) * 0.04),
-                child: loginButton('Berkunjung', hijau, putih),
-              )),
-          SizedBox(
-            height: tinggi(context) * 0.02,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                  absen["masuk"] == null
-                      ? "Masuk :"
-                      : "Masuk :" + absen["masuk"],
-                  style: GoogleFonts.montserrat(
-                    fontSize: 12,
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                  )),
-              Text(
-                  absen["keluar"] == null
-                      ? "Keluar :"
-                      : "Keluar :" + absen["keluar"],
-                  style: GoogleFonts.montserrat(
-                    fontSize: 12,
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                  )),
-            ],
-          ),
-          SizedBox(
-            height: tinggi(context) * 0.007,
-          ),
-          GestureDetector(
-            onTap: (() {
-              absen["keluar"] != "" ? null : attendance(context);
-            }),
-            child: Container(
-                height: tinggi(context) * 0.07,
-                child: loginButton(
-                    absen["masuk"] == "" ? 'Absen Masuk' : 'Absen Keluar',
-                    absen["keluar"] == "" ? biru : abu,
-                    absen["keluar"] == "" ? putih : hitam)),
-          ),
-          SizedBox(
-            height: tinggi(context) * 0.025,
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text("Visit :",
+  Widget appbar(context) {
+    return Container(
+      color: putih,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            Text("Sales Dashboard",
                 style: GoogleFonts.montserrat(
-                  fontSize: 14,
+                  fontSize: 20,
                   textStyle: Theme.of(context).textTheme.bodyLarge,
                 )),
-          ),
-          SizedBox(
-            height: tinggi(context) * 0.015,
-          ),
-          Row(
-            children: [
-              Container(
-                height: tinggi(context) * 0.08,
-                width: tinggi(context) * 0.08,
-                decoration: BoxDecoration(
-                  boxShadow: <BoxShadow>[
-                    //   BoxShadow(
-                    //     color: biru.withOpacity(0.4),
-                    //     blurRadius: 6,
-                    //     offset: Offset(0, 8),
-                    //   ),
-                  ],
-                  color: peach,
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  // shadowColor: Color.fromRGBO(237, 155, 12, 1),
+            SizedBox(
+              height: tinggi(context) * 0.02,
+            ),
+            Flexible(
+              child: CircleAvatar(
+                minRadius: 30,
+                maxRadius: 60,
+                backgroundColor: orange,
+                // backgroundImage: AssetImage('assets/horse.png'),
+              ),
+            ),
+            SizedBox(
+              height: tinggi(context) * 0.015,
+            ),
+            Text(user["nama"] ?? "",
+                style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                )),
+            SizedBox(
+              height: tinggi(context) * 0.015,
+            ),
+            Text(user["type"] ?? "",
+                style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                )),
+            SizedBox(
+              height: tinggi(context) * 0.015,
+            ),
+            Container(
+                height: tinggi(context) * 0.07,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: lebar(context) * 0.02,
+                      right: lebar(context) * 0.02),
+                  child: pelangganVisit.length == 0
+                      ? loginButton('Tidak Berkunjung', abu, hitam)
+                      : loginButton('Berkunjung', hijau, putih),
+                )),
+            SizedBox(
+              height: tinggi(context) * 0.02,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                    absen["masuk"] == null
+                        ? "Masuk :"
+                        : "Masuk :" + absen["masuk"],
+                    style: GoogleFonts.montserrat(
+                      fontSize: 12,
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    )),
+                Text(
+                    absen["keluar"] == null
+                        ? "Keluar :"
+                        : "Keluar :" + absen["keluar"],
+                    style: GoogleFonts.montserrat(
+                      fontSize: 12,
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: tinggi(context) * 0.007,
+            ),
+            GestureDetector(
+              onTap: (() {
+                attendance(context);
+              }),
+              child: Container(
+                  height: tinggi(context) * 0.07,
+                  child: loginButton(
+                      absen["keluar"] != "" ? 'Absen Masuk' : 'Absen Keluar',
+                      absen["keluar"] == "" ? biru : abu,
+                      absen["keluar"] == "" ? putih : hitam)),
+            ),
+            SizedBox(
+              height: tinggi(context) * 0.025,
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text("Visit :",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 14,
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                  )),
+            ),
+            SizedBox(
+              height: tinggi(context) * 0.015,
+            ),
+            Row(
+              children: [
+                Container(
+                  height: tinggi(context) * 0.08,
+                  width: tinggi(context) * 0.08,
+                  decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      //   BoxShadow(
+                      //     color: biru.withOpacity(0.4),
+                      //     blurRadius: 6,
+                      //     offset: Offset(0, 8),
+                      //   ),
+                    ],
+                    color: peach,
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    // shadowColor: Color.fromRGBO(237, 155, 12, 1),
+                  ),
+                  child: Icon(Icons.store,
+                      color: orange, size: tinggi(context) * 0.04),
                 ),
-                child: Icon(Icons.store,
-                    color: orange, size: tinggi(context) * 0.04),
-              ),
-              SizedBox(
-                width: lebar(context) * 0.01,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Makmur Jaya",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 12,
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                      )),
-                  Text("Surabaya",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 8,
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                      )),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: tinggi(context) * 0.01,
-          ),
-          Row(
-            children: [
-              Container(
-                height: tinggi(context) * 0.08,
-                width: tinggi(context) * 0.08,
-                decoration: BoxDecoration(
-                  boxShadow: <BoxShadow>[],
-                  color: peach,
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  // shadowColor: Color.fromRGBO(237, 155, 12, 1),
+                SizedBox(
+                  width: lebar(context) * 0.01,
                 ),
-                child: Icon(Icons.account_box,
-                    color: orange, size: tinggi(context) * 0.04),
-              ),
-              SizedBox(
-                width: lebar(context) * 0.01,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Sulistyo",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 12,
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                      )),
-                  Text("0822253255555",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 7,
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                      )),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: tinggi(context) * 0.02,
-          ),
-          Container(
-              height: tinggi(context) * 0.07,
-              child: loginButton('Check Out', abu, hitam)),
-        ],
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          pelangganVisit.length == 0
+                              ? ""
+                              : pelangganVisit["pelanggan"]["nama_toko"]
+                                  .toString(),
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                          )),
+                      Text(
+                          pelangganVisit.length == 0
+                              ? ""
+                              : pelangganVisit["pelanggan"]["alamat"]
+                                  .toString(),
+                          style: GoogleFonts.montserrat(
+                            fontSize: 8,
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                          )),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: tinggi(context) * 0.01,
+            ),
+            Row(
+              children: [
+                Container(
+                  height: tinggi(context) * 0.08,
+                  width: tinggi(context) * 0.08,
+                  decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[],
+                    color: peach,
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    // shadowColor: Color.fromRGBO(237, 155, 12, 1),
+                  ),
+                  child: Icon(Icons.account_box,
+                      color: orange, size: tinggi(context) * 0.04),
+                ),
+                SizedBox(
+                  width: lebar(context) * 0.01,
+                ),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          pelangganVisit.length == 0
+                              ? ""
+                              : pelangganVisit["pelanggan"]["nama"].toString(),
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                          )),
+                      Text(
+                          pelangganVisit.length == 0
+                              ? ""
+                              : pelangganVisit["pelanggan"]["telepon"]
+                                  .toString(),
+                          style: GoogleFonts.montserrat(
+                            fontSize: 7,
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                          )),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: tinggi(context) * 0.02,
+            ),
+            GestureDetector(
+              onTap: () {
+                pelangganVisit.length != 0
+                    ? kunjungan(pelangganVisit["pelanggan"]["id"].toString(),
+                            context)
+                        .then((value) {
+                        if (value) {
+                          setState(() {
+                            pelangganVisit = {};
+                          });
+                        }
+                      })
+                    : null;
+              },
+              child: Container(
+                  height: tinggi(context) * 0.07,
+                  child: loginButton('Check Out', abu, hitam)),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 Widget dashboard(context) {

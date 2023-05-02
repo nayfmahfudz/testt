@@ -17,7 +17,10 @@ class _VisitState extends State<Visit> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(lebar(context) * 0.053),
+        padding: EdgeInsets.only(
+            left: lebar(context) * 0.053,
+            right: lebar(context) * 0.053,
+            top: lebar(context) * 0.053),
         child: Column(
           children: [
             Row(
@@ -58,7 +61,7 @@ class _VisitState extends State<Visit> {
           return Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
             child: Container(
-              height: tinggi(context) * 0.2,
+              height: tinggi(context) * 0.25,
               width: lebar(context),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -75,13 +78,13 @@ class _VisitState extends State<Visit> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: tinggi(context) * 0.014,
+                          height: tinggi(context) * 0.01,
                         ),
                         Text(
                           pelanggans[index]["nama"] ?? "",
                           style: TextStyle(
                               color: hitam,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.w400),
                         ),
                         SizedBox(
@@ -95,7 +98,7 @@ class _VisitState extends State<Visit> {
                               fontWeight: FontWeight.w400),
                         ),
                         SizedBox(
-                          height: tinggi(context) * 0.014,
+                          height: tinggi(context) * 0.004,
                         ),
                         Text(
                           pelanggans[index]["telepon"] ?? "",
@@ -159,7 +162,10 @@ class _VisitState extends State<Visit> {
                         GestureDetector(
                           onTap: (() {
                             kunjungan(
-                                pelanggans[index]["id"].toString(), context);
+                                    pelanggans[index]["id"].toString(), context)
+                                .then((value) => setState(() {
+                                      pelangganVisit;
+                                    }));
                           }),
                           child: Container(
                               height: tinggi(context) * 0.09,

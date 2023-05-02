@@ -41,8 +41,8 @@ nama(TextEditingController controller, BuildContext context) {
             autofocus: false,
             decoration: InputDecoration(
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide.none),
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
               hintText: 'Username',
               contentPadding: EdgeInsets.all(20),
             ),
@@ -219,7 +219,7 @@ password(TextEditingController controller, bool hide) {
                   hintText: ' Password',
                   contentPadding: EdgeInsets.all(20),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   ),
                   //   suffixIcon: IconButton(
                   //       icon: Icon(
