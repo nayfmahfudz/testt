@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testt/component/api.dart';
 import 'package:testt/component/fom.dart';
+import 'package:testt/menu.dart';
 import 'package:testt/setting.dart';
 
 class Visit extends StatefulWidget {
@@ -15,37 +16,40 @@ class _VisitState extends State<Visit> {
   List pelanggans = [];
   var searchController = new TextEditingController();
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(
-            left: lebar(context) * 0.053,
-            right: lebar(context) * 0.053,
-            top: lebar(context) * 0.053),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                    child: searchfield(
-                        searchController, context, "Search Pelanggan",
-                        ((value) {
-                  setState(() {
-                    pelanggan(context, value).then((value) => setState(() {
-                          pelanggans = value;
-                        }));
-                  });
-                }))),
-                SizedBox(
-                  width: lebar(context) * 0.03,
-                ),
-                Container(
-                    height: lebar(context) * 0.06,
-                    width: lebar(context) * 0.06,
-                    child: searchButton(Icons.search, orange, peach)),
-              ],
-            ),
-            Expanded(child: cardSearch(context))
-          ],
+    return WillPopScope(
+      onWillPop: () => replaceToNextScreen(context, Menu()),
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.only(
+              left: lebar(context) * 0.053,
+              right: lebar(context) * 0.053,
+              top: lebar(context) * 0.053),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: searchfield(
+                          searchController, context, "Search Pelanggan",
+                          ((value) {
+                    setState(() {
+                      pelanggan(context, value).then((value) => setState(() {
+                            pelanggans = value;
+                          }));
+                    });
+                  }))),
+                  SizedBox(
+                    width: lebar(context) * 0.03,
+                  ),
+                  Container(
+                      height: lebar(context) * 0.06,
+                      width: lebar(context) * 0.06,
+                      child: searchButton(Icons.search, orange, peach)),
+                ],
+              ),
+              Expanded(child: cardSearch(context))
+            ],
+          ),
         ),
       ),
     );

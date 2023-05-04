@@ -20,6 +20,17 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   @override
+  @override
+  void initState() {
+    super.initState();
+    cekKunjungan(context).then((value) => setState(() {
+          pelangganVisit;
+        }));
+    cekAbsen(context).then((value) => setState(() {
+          absen;
+        }));
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: abu,
@@ -123,12 +134,16 @@ class _MenuState extends State<Menu> {
             ),
             GestureDetector(
               onTap: (() {
-                attendance(context);
+                attendance(context).then((value) {
+                  setState(() {
+                    absen;
+                  });
+                });
               }),
               child: Container(
                   height: tinggi(context) * 0.07,
                   child: loginButton(
-                      absen["keluar"] != "" ? 'Absen Masuk' : 'Absen Keluar',
+                      absen["masuk"] == "" ? 'Absen Masuk' : 'Absen Keluar',
                       absen["keluar"] == "" ? biru : abu,
                       absen["keluar"] == "" ? putih : hitam)),
             ),
@@ -261,7 +276,7 @@ class _MenuState extends State<Menu> {
               },
               child: Container(
                   height: tinggi(context) * 0.07,
-                  child: loginButton('Check Out', abu, hitam)),
+                  child: loginButton('Finish Visit', abu, hitam)),
             ),
           ],
         ),
@@ -388,7 +403,7 @@ Widget catatan(context) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("Welcome, Joko",
+                  Text("Welcome, ${user["nama"]}",
                       style: GoogleFonts.montserrat(
                         color: putih,
                         fontSize: 40,

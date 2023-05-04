@@ -21,7 +21,7 @@ Future attendance(BuildContext context) async {
     alarm(context, error);
     print(response.data);
     if (response.statusCode == 200) {
-      cekAbsen(context);
+      await cekAbsen(context);
       return true;
     }
     return false;
@@ -145,7 +145,7 @@ Future cekAbsen(BuildContext context) async {
         : DateFormat('hh:mm').format(
             DateFormat('HH:mm').parse(response.data["data"]["time_end"]));
     if (response.statusCode == 200) {
-      return response.data["data"];
+      return absen;
     }
     return [];
   } on DioError catch (e) {
