@@ -6,6 +6,7 @@ import 'package:frino_icons/frino_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testt/Visit.dart';
 import 'package:testt/component/fom.dart';
+import 'package:testt/edit.dart';
 import 'package:testt/pendaftaran.dart';
 import 'package:testt/setting.dart';
 
@@ -363,6 +364,44 @@ Widget dashboard(context) {
                   height: tinggi(context) * 0.02,
                 ),
                 Text("Visit",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 18,
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    )),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: GestureDetector(
+            onTap: (() {
+              navigateToNextScreen(context, Edit());
+            }),
+            child: Column(
+              children: [
+                Container(
+                  height: tinggi(context) * 0.2,
+                  width: tinggi(context) * 0.2,
+                  decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: biru.withOpacity(0.4),
+                        blurRadius: 6,
+                        offset: Offset(0, 8),
+                      ),
+                    ],
+                    color: peach,
+                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    // shadowColor: Color.fromRGBO(237, 155, 12, 1),
+                  ),
+                  child: Icon(Icons.edit,
+                      color: orange, size: tinggi(context) * 0.08),
+                ),
+                SizedBox(
+                  height: tinggi(context) * 0.02,
+                ),
+                Text("Edit Pelanggan",
                     style: GoogleFonts.montserrat(
                       fontSize: 18,
                       textStyle: Theme.of(context).textTheme.bodyLarge,

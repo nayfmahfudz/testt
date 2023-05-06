@@ -279,6 +279,85 @@ Future kelurahan(BuildContext context, String idkecamatan) async {
   }
 }
 
+Future edit(
+    String id,
+    TextEditingController namaController,
+    TextEditingController namaTokoController,
+    TextEditingController alamatTokoController,
+    TextEditingController emailController,
+    TextEditingController teleponController,
+    TextEditingController passwordController,
+    String ProvinsiController,
+    String KelurahanController,
+    String KecamatanController,
+    String kotaController,
+    BuildContext context) async {
+  try {
+    await Geolocator.requestPermission();
+    var permission = await Geolocator.checkPermission();
+    var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      berhasil(context, "Izin Location Ditolak");
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print({
+      "nama": namaController.text,
+      "nama_toko": namaTokoController.text,
+      "alamat_toko": alamatTokoController.text,
+      "email": emailController.text,
+      "telepon": teleponController.text,
+      "password": passwordController.text,
+      "retype_password": passwordController.text,
+      "kelurahan": KelurahanController,
+      "kecamatan": KecamatanController,
+      "kota": kotaController,
+      "lat": position.latitude.toString(),
+      "lng": position.latitude.toString()
+    });
+    FormData formData = FormData.fromMap({
+      "nama": namaController.text,
+      "nama_toko": namaTokoController.text,
+      "alamat_toko": alamatTokoController.text,
+      "email": emailController.text,
+      "telepon": teleponController.text,
+      "password": passwordController.text,
+      "retype_password": passwordController.text,
+      "kelurahan": KelurahanController,
+      "kecamatan": KecamatanController,
+      "kota": kotaController,
+      "lat": position.latitude.toString(),
+      "lng": position.latitude.toString()
+    });
+    var response = await Dio().put('$url/api/sales/pelanggan/${id}',
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        }));
+    print(response.statusCode.toString() == "200");
+    if (response.statusCode.toString() == "200") {
+      alarm(context, response.data["message"]);
+
+      return true;
+    }
+    return false;
+  } on DioError catch (e) {
+    print(e.response?.data);
+    var error = e.response?.data?["errors"][0]["message"];
+    if (e.response?.statusCode == 401) {
+      final prefs = await SharedPreferences.getInstance();
+
+      alarm(context, error);
+      replaceToNextScreen(context, Login());
+      prefs.setString('user', "null");
+      prefs.setString('key', "null");
+      return [];
+    }
+    alarm(context, error);
+  }
+}
+
 Future daftar(
     TextEditingController namaController,
     TextEditingController namaTokoController,

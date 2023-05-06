@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/services.dart';
 import 'package:testt/Login.dart';
 import 'package:testt/component/api.dart';
 import 'package:testt/menu.dart';
@@ -12,9 +13,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // await initializeService();
-  runApp(MyApp());
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]).then((value) => runApp(MyApp()));
 }
 
 class MyApp extends StatefulWidget {
