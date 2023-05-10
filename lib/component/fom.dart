@@ -110,8 +110,16 @@ Widget dropdown(Map<String, dynamic> controller, BuildContext context,
   );
 }
 
-Widget formfield(TextEditingController controller, BuildContext context,
-    String hint, IconData icon, IconData iconClose, hide, pasword) {
+Widget formfield(
+    TextEditingController controller,
+    BuildContext context,
+    String hint,
+    IconData icon,
+    IconData iconClose,
+    hide,
+    pasword,
+    Function validator,
+    {bool angka = false}) {
   return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Row(
             children: [
@@ -132,18 +140,15 @@ Widget formfield(TextEditingController controller, BuildContext context,
                 child: Container(
                   color: putih,
                   child: TextFormField(
+                    keyboardType:
+                        angka ? TextInputType.number : TextInputType.text,
                     obscureText: pasword == true
                         ? hide
                             ? true
                             : false
                         : false,
                     controller: controller,
-                    validator: (value) {
-                      if (value != null && value.length < 3)
-                        return 'Harus diisi minimal 3 kata';
-                      else
-                        return null;
-                    },
+                    validator: ((value) => validator(value)),
                     autofocus: false,
                     decoration: InputDecoration(
                         labelStyle: TextStyle(color: biru),
@@ -416,7 +421,24 @@ menuUtama(BuildContext context, String selected, String aktif,
 // int switchControl;
 
 // String hasil;
-
+void loading(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(
+            height: lebar(context) * 0.1,
+          ),
+          Text(
+            "Tunggu Sebentar",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
 void berhasil(BuildContext context, String uraian) => showDialog(
       context: context,
       builder: (context) => Center(

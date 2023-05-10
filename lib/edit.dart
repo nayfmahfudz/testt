@@ -7,7 +7,8 @@ import 'package:testt/setting.dart';
 import 'component/fom.dart';
 
 class Edit extends StatefulWidget {
-  const Edit({super.key});
+  Edit(this.data);
+  Map data = {};
 
   @override
   State<Edit> createState() => _EditState();
@@ -16,23 +17,60 @@ class Edit extends StatefulWidget {
 class _EditState extends State<Edit> {
   @override
   void initState() {
+    namaController.text = widget.data["nama"].toString();
+    namaTokoController.text = widget.data["nama_toko"].toString();
+    alamatTokoController.text = widget.data["alamat_toko"].toString();
+    emailController.text = widget.data["email"].toString();
+    teleponController.text = widget.data["telepon"].toString();
+    print(widget.data);
     if (Provinsi.length == 0) {
       provinsi(context).then((value) {
         setState(() {
           Provinsi = value;
-          ProvinsiController = value[0];
+          Provinsi.forEach((item) {
+            if (item["provinsi"] == widget.data["provinsi"]) {
+              print(item);
+              ProvinsiController = item;
+              kabkota(context, item["id"]).then((value) {
+                value.forEach((item) {
+                  if (item["nama"] == widget.data["kota"]) {
+                    print(item);
+                    kotaController = item;
+                    kecamatan(context, item["id"]).then((value) {
+                      value.forEach((item) {
+                        if (item["nama"] == widget.data["kecamatan"]) {
+                          print(item);
+                          KecamatanController = item;
+                          kelurahan(context, item["id"]).then((value) {
+                            value.forEach((item) {
+                              if (item["nama"] == widget.data["kelurahan"]) {
+                                print(item);
+                                KelurahanController = item;
+                              }
+                            });
+                          });
+                        }
+                      });
+                    });
+                  }
+                });
+              });
+            }
+          });
         });
       });
     }
     super.initState();
   }
 
+  var alamatController = new TextEditingController();
   var namaController = new TextEditingController();
   var namaTokoController = new TextEditingController();
   var alamatTokoController = new TextEditingController();
   var emailController = new TextEditingController();
   var teleponController = new TextEditingController();
   var passwordController = new TextEditingController();
+  var repasswordController = new TextEditingController();
   var kotaController = Map<String, dynamic>();
   var KecamatanController = Map<String, dynamic>();
   var KelurahanController = Map<String, dynamic>();
@@ -40,25 +78,8 @@ class _EditState extends State<Edit> {
   final formKey = GlobalKey<FormState>();
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(
-            top: lebar(context) * 0.053,
-            left: lebar(context) * 0.053,
-            right: lebar(context) * 0.053),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Edit Pelanggan",
-                style: TextStyle(
-                    color: biru, fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-              Expanded(child: form(context))
-            ],
-          ),
-        ),
+      body: Container(
+        child: form(context),
       ),
     );
   }
@@ -68,16 +89,57 @@ class _EditState extends State<Edit> {
       child: Form(
         key: formKey,
         child: ListView(
+          physics: ScrollPhysics(),
           shrinkWrap: true,
           children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  top: lebar(context) * 0.023,
+                  left: lebar(context) * 0.053,
+                  right: lebar(context) * 0.053,
+                  bottom: lebar(context) * 0.053),
+              child: Text(
+                "Edit Pelanggan",
+                style: TextStyle(
+                    color: biru, fontSize: 25, fontWeight: FontWeight.w500),
+              ),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(width: lebar(context) * 0.053),
                 Expanded(
                   child: ListView(shrinkWrap: true, children: [
-                    formfield(namaController, context, "Nama",
-                        Icons.account_box, Icons.account_box, false, false),
+                    formfield(
+                        namaController,
+                        context,
+                        "Nama",
+                        Icons.account_box,
+                        Icons.account_box,
+                        false,
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(
+                        alamatController,
+                        context,
+                        "Alamat",
+                        Icons.account_balance,
+                        Icons.account_balance,
+                        false,
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
@@ -88,7 +150,12 @@ class _EditState extends State<Edit> {
                         Icons.account_balance,
                         Icons.account_balance,
                         false,
-                        false),
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
@@ -99,17 +166,33 @@ class _EditState extends State<Edit> {
                         Icons.account_balance,
                         Icons.account_balance,
                         false,
-                        false),
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
                     formfield(emailController, context, "E-mail", Icons.mail,
-                        Icons.mail, false, false),
+                        Icons.mail, false, false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
                     formfield(teleponController, context, "Telepon",
-                        Icons.phone, Icons.phone, false, false),
+                        Icons.phone, Icons.phone, false, false, angka: true,
+                        (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                   ]),
                 ),
                 SizedBox(
@@ -120,8 +203,37 @@ class _EditState extends State<Edit> {
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
-                    formfield(passwordController, context, "Password",
-                        Icons.visibility, Icons.visibility_off, false, true),
+                    formfield(
+                        passwordController,
+                        context,
+                        "Password",
+                        Icons.visibility,
+                        Icons.visibility_off,
+                        false,
+                        true, (value) {
+                      if (value.length < 5 &&
+                          repasswordController.text != passwordController.text)
+                        return 'Password Tidak sama atau kurang dari 5';
+                      else
+                        return null;
+                    }),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(
+                        repasswordController,
+                        context,
+                        "Ulangi Password",
+                        Icons.visibility,
+                        Icons.visibility_off,
+                        false,
+                        true, (value) {
+                      if (value.length < 5 &&
+                          repasswordController.text != passwordController.text)
+                        return 'Password Tidak sama atau kurang dari 5';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
@@ -184,6 +296,7 @@ class _EditState extends State<Edit> {
                     })),
                   ]),
                 ),
+                SizedBox(width: lebar(context) * 0.053),
               ],
             ),
             SizedBox(
@@ -191,39 +304,35 @@ class _EditState extends State<Edit> {
             ),
             Align(
               alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: (() {
-                  if (formKey.currentState!.validate()) {
-                    edit(
-                            "",
-                            namaController,
-                            namaTokoController,
-                            alamatTokoController,
-                            emailController,
-                            teleponController,
-                            passwordController,
-                            ProvinsiController["nama"],
-                            KelurahanController["nama"],
-                            KecamatanController["nama"],
-                            kotaController["nama"],
-                            context)
-                        .then((value) {
-                      if (value == true) {
-                        namaController.text = "";
-                        namaTokoController.text = "";
-                        alamatTokoController.text = "";
-                        emailController.text = "";
-                        teleponController.text = "";
-                        passwordController.text = "";
-                      }
-                    });
-                  }
-                }),
-                child: Container(
-                    height: tinggi(context) * 0.11,
-                    width: lebar(context) * 0.3,
-                    child: loginButton(
-                        'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: lebar(context) * 0.053,
+                ),
+                child: GestureDetector(
+                  onTap: (() {
+                    if (formKey.currentState!.validate()) {
+                      edit(
+                          widget.data["id"].toString(),
+                          namaController,
+                          namaTokoController,
+                          alamatTokoController,
+                          emailController,
+                          teleponController,
+                          passwordController,
+                          ProvinsiController["nama"],
+                          KelurahanController["nama"],
+                          KecamatanController["nama"],
+                          kotaController["nama"],
+                          alamatController,
+                          context);
+                    }
+                  }),
+                  child: Container(
+                      height: tinggi(context) * 0.11,
+                      width: lebar(context) * 0.3,
+                      child: loginButton(
+                          'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+                ),
               ),
             ),
             SizedBox(

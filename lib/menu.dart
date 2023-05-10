@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:frino_icons/frino_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testt/Visit.dart';
+import 'package:testt/cariPelanggan.dart';
 import 'package:testt/component/fom.dart';
 import 'package:testt/edit.dart';
 import 'package:testt/pendaftaran.dart';
@@ -376,7 +377,7 @@ Widget dashboard(context) {
           padding: const EdgeInsets.all(30.0),
           child: GestureDetector(
             onTap: (() {
-              navigateToNextScreen(context, Edit());
+              navigateToNextScreen(context, CariPelanggan());
             }),
             child: Column(
               children: [

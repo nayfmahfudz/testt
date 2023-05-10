@@ -27,12 +27,14 @@ class _PendafataranState extends State<Pendafataran> {
     super.initState();
   }
 
-  var namaController = new TextEditingController();
+  var namaController = TextEditingController();
   var namaTokoController = new TextEditingController();
   var alamatTokoController = new TextEditingController();
+  var alamatController = new TextEditingController();
   var emailController = new TextEditingController();
   var teleponController = new TextEditingController();
   var passwordController = new TextEditingController();
+  var repasswordController = new TextEditingController();
   var kotaController = Map<String, dynamic>();
   var KecamatanController = Map<String, dynamic>();
   var KelurahanController = Map<String, dynamic>();
@@ -40,22 +42,8 @@ class _PendafataranState extends State<Pendafataran> {
   final formKey = GlobalKey<FormState>();
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(lebar(context) * 0.053),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Pendaftaran Pelanggan",
-                style: TextStyle(
-                    color: biru, fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-              Expanded(child: form(context))
-            ],
-          ),
-        ),
+      body: Container(
+        child: form(context),
       ),
     );
   }
@@ -65,16 +53,42 @@ class _PendafataranState extends State<Pendafataran> {
       child: Form(
         key: formKey,
         child: ListView(
+          physics: ScrollPhysics(),
+          padding: EdgeInsets.only(top: lebar(context) * 0.053),
           shrinkWrap: true,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(
+                  width: lebar(context) * 0.053,
+                ),
                 Expanded(
                   child: ListView(shrinkWrap: true, children: [
-                    formfield(namaController, context, "Nama",
-                        Icons.account_box, Icons.account_box, false, false),
+                    Text(
+                      "Pendaftaran Pelanggan",
+                      style: TextStyle(
+                          color: biru,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: tinggi(context) * 0.053,
+                    ),
+                    formfield(
+                        namaController,
+                        context,
+                        "Nama",
+                        Icons.account_box,
+                        Icons.account_box,
+                        false,
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
@@ -85,7 +99,28 @@ class _PendafataranState extends State<Pendafataran> {
                         Icons.account_balance,
                         Icons.account_balance,
                         false,
-                        false),
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(
+                        alamatController,
+                        context,
+                        "Alamat",
+                        Icons.account_balance,
+                        Icons.account_balance,
+                        false,
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
@@ -96,17 +131,33 @@ class _PendafataranState extends State<Pendafataran> {
                         Icons.account_balance,
                         Icons.account_balance,
                         false,
-                        false),
+                        false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
                     formfield(emailController, context, "E-mail", Icons.mail,
-                        Icons.mail, false, false),
+                        Icons.mail, false, false, (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
                     formfield(teleponController, context, "Telepon",
-                        Icons.phone, Icons.phone, false, false),
+                        Icons.phone, Icons.phone, false, false, angka: true,
+                        (value) {
+                      if (value != null && value.length < 3)
+                        return 'Harus diisi minimal 3 kata';
+                      else
+                        return null;
+                    }),
                   ]),
                 ),
                 SizedBox(
@@ -117,8 +168,37 @@ class _PendafataranState extends State<Pendafataran> {
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
-                    formfield(passwordController, context, "Password",
-                        Icons.visibility, Icons.visibility_off, false, true),
+                    formfield(
+                        passwordController,
+                        context,
+                        "Password",
+                        Icons.visibility,
+                        Icons.visibility_off,
+                        false,
+                        true, (value) {
+                      if (value.length > 5 &&
+                          repasswordController.text != passwordController.text)
+                        return 'Password Tidak sama atau kurang dari 5';
+                      else
+                        return null;
+                    }),
+                    SizedBox(
+                      height: tinggi(context) * 0.04,
+                    ),
+                    formfield(
+                        repasswordController,
+                        context,
+                        "Ulangi Password",
+                        Icons.visibility,
+                        Icons.visibility_off,
+                        false,
+                        true, (value) {
+                      if (value.length < 5 &&
+                          repasswordController.text != passwordController.text)
+                        return 'Password Tidak sama atau kurang dari 5';
+                      else
+                        return null;
+                    }),
                     SizedBox(
                       height: tinggi(context) * 0.04,
                     ),
@@ -181,6 +261,9 @@ class _PendafataranState extends State<Pendafataran> {
                     })),
                   ]),
                 ),
+                SizedBox(
+                  width: lebar(context) * 0.053,
+                ),
               ],
             ),
             SizedBox(
@@ -188,38 +271,44 @@ class _PendafataranState extends State<Pendafataran> {
             ),
             Align(
               alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: (() {
-                  if (formKey.currentState!.validate()) {
-                    daftar(
-                            namaController,
-                            namaTokoController,
-                            alamatTokoController,
-                            emailController,
-                            teleponController,
-                            passwordController,
-                            ProvinsiController["nama"],
-                            KelurahanController["nama"],
-                            KecamatanController["nama"],
-                            kotaController["nama"],
-                            context)
-                        .then((value) {
-                      if (value == true) {
-                        namaController.text = "";
-                        namaTokoController.text = "";
-                        alamatTokoController.text = "";
-                        emailController.text = "";
-                        teleponController.text = "";
-                        passwordController.text = "";
-                      }
-                    });
-                  }
-                }),
-                child: Container(
-                    height: tinggi(context) * 0.11,
-                    width: lebar(context) * 0.3,
-                    child: loginButton(
-                        'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: lebar(context) * 0.053,
+                ),
+                child: GestureDetector(
+                  onTap: (() {
+                    if (formKey.currentState!.validate()) {
+                      daftar(
+                              namaController,
+                              namaTokoController,
+                              alamatTokoController,
+                              emailController,
+                              teleponController,
+                              passwordController,
+                              ProvinsiController["nama"],
+                              KelurahanController["nama"],
+                              KecamatanController["nama"],
+                              kotaController["nama"],
+                              alamatController,
+                              context)
+                          .then((value) {
+                        if (value == true) {
+                          namaController.text = "";
+                          namaTokoController.text = "";
+                          alamatTokoController.text = "";
+                          emailController.text = "";
+                          teleponController.text = "";
+                          passwordController.text = "";
+                        }
+                      });
+                    }
+                  }),
+                  child: Container(
+                      height: tinggi(context) * 0.11,
+                      width: lebar(context) * 0.3,
+                      child: loginButton(
+                          'Submit', Color.fromARGB(255, 129, 199, 132), hitam)),
+                ),
               ),
             ),
           ],

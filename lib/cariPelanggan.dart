@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:testt/component/api.dart';
 import 'package:testt/component/fom.dart';
+import 'package:testt/edit.dart';
 import 'package:testt/menu.dart';
 import 'package:testt/setting.dart';
 
-class Visit extends StatefulWidget {
-  const Visit({super.key});
+class CariPelanggan extends StatefulWidget {
+  const CariPelanggan({super.key});
 
   @override
-  State<Visit> createState() => _VisitState();
+  State<CariPelanggan> createState() => _CariPelangganState();
 }
 
-class _VisitState extends State<Visit> {
+class _CariPelangganState extends State<CariPelanggan> {
   @override
   @override
   void initState() {
     super.initState();
-    pelanggan(context, "").then((value) => setState(() {
+    pelangganAll(context, "").then((value) => setState(() {
           pelanggans = value;
         }));
   }
@@ -27,37 +28,45 @@ class _VisitState extends State<Visit> {
     return WillPopScope(
       onWillPop: () => replaceToNextScreen(context, Menu()),
       child: Scaffold(
-        body: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  top: lebar(context) * 0.053,
-                  left: lebar(context) * 0.053,
-                  right: lebar(context) * 0.053),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: searchfield(
-                          searchController, context, "Search Pelanggan",
-                          ((value) {
-                    setState(() {
-                      pelanggan(context, value).then((value) => setState(() {
-                            pelanggans = value;
-                          }));
-                    });
-                  }))),
-                  SizedBox(
-                    width: lebar(context) * 0.03,
+        body: SingleChildScrollView(
+          physics: ScrollPhysics(),
+          child: Container(
+            height: tinggi(context),
+            width: lebar(context),
+            padding: EdgeInsets.only(top: lebar(context) * 0.053),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: lebar(context) * 0.053,
+                      right: lebar(context) * 0.053),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: searchfield(
+                              searchController, context, "Search Pelanggan",
+                              ((value) {
+                        setState(() {
+                          pelangganAll(context, value)
+                              .then((value) => setState(() {
+                                    pelanggans = value;
+                                  }));
+                        });
+                      }))),
+                      SizedBox(
+                        width: lebar(context) * 0.03,
+                      ),
+                      Container(
+                          height: lebar(context) * 0.06,
+                          width: lebar(context) * 0.06,
+                          child: searchButton(Icons.search, orange, peach)),
+                    ],
                   ),
-                  Container(
-                      height: lebar(context) * 0.06,
-                      width: lebar(context) * 0.06,
-                      child: searchButton(Icons.search, orange, peach)),
-                ],
-              ),
+                ),
+                Expanded(child: cardSearch(context))
+              ],
             ),
-            Expanded(child: cardSearch(context))
-          ],
+          ),
         ),
       ),
     );
@@ -176,22 +185,19 @@ class _VisitState extends State<Visit> {
                         ),
                         GestureDetector(
                           onTap: (() {
-                            kunjungan(
-                                    pelanggans[index]["id"].toString(), context)
-                                .then((value) => setState(() {
-                                      pelangganVisit;
-                                    }));
+                            navigateToNextScreen(
+                                context, Edit(pelanggans[index]));
+                            // kunjungan(
+                            //         pelanggans[index]["id"].toString(), context)
+                            //     .then((value) => setState(() {
+                            //           pelangganVisit;
+                            //         }));
                           }),
                           child: Container(
                               height: tinggi(context) * 0.09,
                               width: lebar(context) * 0.15,
-                              child: pelangganVisit["pelanggan"]["id"] ==
-                                      pelanggans[index]["id"]
-                                  ? loginButton('Visiting', merah, hitam)
-                                  : loginButton(
-                                      'Visit',
-                                      Color.fromARGB(255, 129, 199, 132),
-                                      hitam)),
+                              child: loginButton('Edit',
+                                  Color.fromARGB(255, 129, 199, 132), hitam)),
                         )
                       ],
                     )

@@ -18,6 +18,7 @@ Future attendance(BuildContext context) async {
           "Authorization": "Bearer $key",
         }));
     var error = response.data["message"];
+
     alarm(context, error);
     print(response.data);
     if (response.statusCode == 200) {
@@ -35,6 +36,7 @@ Future attendance(BuildContext context) async {
 
 Future kunjungan(String id, BuildContext context) async {
   try {
+    loading(context);
     final prefs = await SharedPreferences.getInstance();
     FormData formData = FormData.fromMap({
       "pelanggan_id": id,
@@ -45,6 +47,7 @@ Future kunjungan(String id, BuildContext context) async {
           "Content-Type": "application/json",
           "Authorization": "Bearer $key",
         }));
+    Navigator.pop(context);
     print(response.data);
     if (response.statusCode == 200) {
       print(response.data);
@@ -163,7 +166,7 @@ Future cekAbsen(BuildContext context) async {
   }
 }
 
-Future pelanggan(BuildContext context, String cari) async {
+Future pelangganAll(BuildContext context, String cari) async {
   try {
     var response =
         await Dio().get('$url/api/sales/pelanggan?pagination=0&search=${cari}',
@@ -171,6 +174,34 @@ Future pelanggan(BuildContext context, String cari) async {
               "Content-Type": "application/json",
               "Authorization": "Bearer $key",
             }));
+    print(response.data);
+    if (response.statusCode == 200) {
+      return response.data["data"];
+    }
+    return [];
+  } on DioError catch (e) {
+    print(e);
+    if (e.response?.statusCode == 401) {
+      final prefs = await SharedPreferences.getInstance();
+      var error = e.response?.data["message"];
+      alarm(context, error);
+      replaceToNextScreen(context, Login());
+      prefs.setString('user', "null");
+      prefs.setString('key', "null");
+      return [];
+    }
+    return [];
+  }
+}
+
+Future pelanggan(BuildContext context, String cari) async {
+  try {
+    var response = await Dio().get(
+        '$url/api/sales/pelanggan?status_pelanggan=active&pagination=0&search=${cari}',
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        }));
     print(response.data);
     if (response.statusCode == 200) {
       return response.data["data"];
@@ -224,13 +255,13 @@ Future kabkota(BuildContext context, idprov) async {
     if (response.statusCode == 200) {
       return response.data;
     }
-    return false;
+    return [];
   } on DioError catch (e) {
     print(e);
     if (e.response?.statusCode == 401) {
       replaceToNextScreen(context, Login());
       alarm(context, e.response?.data.message);
-      return false;
+      return [];
     }
   }
 }
@@ -291,6 +322,7 @@ Future edit(
     String KelurahanController,
     String KecamatanController,
     String kotaController,
+    TextEditingController alamatController,
     BuildContext context) async {
   try {
     await Geolocator.requestPermission();
@@ -315,27 +347,28 @@ Future edit(
       "lat": position.latitude.toString(),
       "lng": position.latitude.toString()
     });
-    FormData formData = FormData.fromMap({
-      "nama": namaController.text,
-      "nama_toko": namaTokoController.text,
-      "alamat_toko": alamatTokoController.text,
-      "email": emailController.text,
-      "telepon": teleponController.text,
-      "password": passwordController.text,
-      "retype_password": passwordController.text,
-      "kelurahan": KelurahanController,
-      "kecamatan": KecamatanController,
-      "kota": kotaController,
-      "lat": position.latitude.toString(),
-      "lng": position.latitude.toString()
-    });
     var response = await Dio().put('$url/api/sales/pelanggan/${id}',
-        data: formData,
+        data: {
+          "nama": namaController.text,
+          "nama_toko": namaTokoController.text,
+          "alamat_toko": alamatTokoController.text,
+          "alamat": alamatController.text,
+          "email": emailController.text,
+          "telepon": teleponController.text,
+          "password": passwordController.text,
+          "retype_password": passwordController.text,
+          "kelurahan": KelurahanController,
+          "kecamatan": KecamatanController,
+          "kota": kotaController,
+          "lat": position.latitude.toString(),
+          "lng": position.latitude.toString()
+        },
         options: Options(headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $key",
         }));
-    print(response.statusCode.toString() == "200");
+    print(id);
+    print(response.statusCode);
     if (response.statusCode.toString() == "200") {
       alarm(context, response.data["message"]);
 
@@ -369,6 +402,7 @@ Future daftar(
     String KelurahanController,
     String KecamatanController,
     String kotaController,
+    TextEditingController alamatController,
     BuildContext context) async {
   try {
     await Geolocator.requestPermission();
@@ -390,6 +424,7 @@ Future daftar(
       "kelurahan": KelurahanController,
       "kecamatan": KecamatanController,
       "kota": kotaController,
+      "retype_password": alamatController.text,
       "lat": position.latitude.toString(),
       "lng": position.latitude.toString()
     });
