@@ -229,7 +229,7 @@ Future provinsi(BuildContext context) async {
           "Content-Type": "application/json",
           "Authorization": "Bearer $key",
         }));
-    print(response.data);
+    // print(response.data);
     if (response.statusCode == 200) {
       return response.data;
     }
@@ -251,7 +251,7 @@ Future kabkota(BuildContext context, idprov) async {
           "Content-Type": "application/json",
           "Authorization": "Bearer $key",
         }));
-    print(response.data);
+    print("masuk");
     if (response.statusCode == 200) {
       return response.data;
     }

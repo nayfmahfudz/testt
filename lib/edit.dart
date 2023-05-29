@@ -22,45 +22,57 @@ class _EditState extends State<Edit> {
     alamatTokoController.text = widget.data["alamat_toko"].toString();
     emailController.text = widget.data["email"].toString();
     teleponController.text = widget.data["telepon"].toString();
-    print(widget.data["provinsi"]);
-    if (Provinsi.length == 0) {
-      provinsi(context).then((value) {
-        setState(() {
-          Provinsi = value;
-          print(value);
-          Provinsi.forEach((item) {
-            print(item);
-            if (item["provinsi"] == widget.data["provinsi"]) {
-              ProvinsiController = item;
-              kabkota(context, item["id"]).then((value) {
-                value.forEach((item) {
-                  if (item["nama"] == widget.data["kota"]) {
-                    print(item);
-                    kotaController = item;
-                    kecamatan(context, item["id"]).then((value) {
-                      value.forEach((item) {
-                        if (item["nama"] == widget.data["kecamatan"]) {
-                          print(item);
-                          KecamatanController = item;
-                          kelurahan(context, item["id"]).then((value) {
-                            value.forEach((item) {
-                              if (item["nama"] == widget.data["kelurahan"]) {
-                                print(item);
-                                KelurahanController = item;
-                              }
-                            });
-                          });
-                        }
-                      });
-                    });
-                  }
-                });
+
+    provinsi(context).then((value) {
+      setState(() {
+        Provinsi = value;
+        Provinsi.forEach((item) {
+          if (item["nama"] == widget.data["provinsi"]) {
+            kabkota(context, item["id"]).then((value) {
+              setState(() {
+                Kota = value;
+                ProvinsiController = item;
               });
-            }
-          });
+              value.forEach((item) {
+                if (item["nama"] == widget.data["kota"]) {
+                  kecamatan(context, item["id"]).then((value) {
+                    setState(() {
+                      kotaController = item;
+                      Kecamatan = value;
+                    });
+                    value.forEach((item) {
+                      if (item["nama"] == widget.data["kecamatan"]) {
+                        kelurahan(context, item["id"]).then((value) {
+                          setState(() {
+                            KecamatanController = item;
+                            Kelurahan = value;
+                          });
+
+                          value.forEach((item) {
+                            if (item["nama"] == widget.data["kelurahan"]) {
+                              setState(() {
+                                KelurahanController = item;
+                              });
+                            }
+                          });
+                        });
+                      }
+                    });
+                  });
+                }
+              });
+            });
+          }
         });
       });
-    }
+      Kelurahan;
+      Kota;
+      Kecamatan;
+      kotaController;
+      KecamatanController;
+      KelurahanController;
+    });
+
     super.initState();
   }
 
