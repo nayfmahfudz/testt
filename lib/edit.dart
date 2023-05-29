@@ -22,14 +22,15 @@ class _EditState extends State<Edit> {
     alamatTokoController.text = widget.data["alamat_toko"].toString();
     emailController.text = widget.data["email"].toString();
     teleponController.text = widget.data["telepon"].toString();
-    print(widget.data);
+    print(widget.data["provinsi"]);
     if (Provinsi.length == 0) {
       provinsi(context).then((value) {
         setState(() {
           Provinsi = value;
+          print(value);
           Provinsi.forEach((item) {
+            print(item);
             if (item["provinsi"] == widget.data["provinsi"]) {
-              print(item);
               ProvinsiController = item;
               kabkota(context, item["id"]).then((value) {
                 value.forEach((item) {

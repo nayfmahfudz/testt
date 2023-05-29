@@ -80,7 +80,7 @@ class _MenuState extends State<Menu> {
             SizedBox(
               height: tinggi(context) * 0.015,
             ),
-            Text(user["nama"] ?? "",
+            Text(user["nama"].split(' ')[0].trim() ?? "",
                 style: GoogleFonts.montserrat(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -443,7 +443,7 @@ Widget catatan(context) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("Welcome, ${user["nama"]}",
+                  Text("Welcome, ${user["nama"].split(' ')[0].trim()}",
                       style: GoogleFonts.montserrat(
                         color: putih,
                         fontSize: 40,
